@@ -165,6 +165,15 @@ function createPokemonCard(pokemon, ownedData) {
             <button class="action-btn secondary" onclick="viewPokemonDetails(${pokemon.id})">
                 Details
             </button>
+            ${pokemon.level < 105 ? `
+                <button class="action-btn level-up" onclick="levelUpPokemon(${pokemon.id})">
+                    Level Up (${localStore.getLevelUpCost(pokemon.level)} PBTC)
+                </button>
+            ` : `
+                <button class="action-btn disabled" disabled>
+                    Max Level
+                </button>
+            `}
         </div>
     `;
 
@@ -178,6 +187,70 @@ function battleWithPokemon(pokemonId) {
     // Store selected Pokemon in sessionStorage
     sessionStorage.setItem('selectedPokemonForBattle', pokemonId);
     window.location.href = 'battle.html';
+}
+
+/**
+ * Level up a Pokemon
+ */
+function levelUpPokemon(pokemonId) {
+    const pokemonData = getPokemonById(pokemonId);
+    const owned = localStore.getOwnedPokemon().find(p => p.pokemonId === pokemonId);
+
+    if (!pokemonData || !owned) return;
+
+    const cost = localStore.getLevelUpCost(owned.level);
+    const balance = localStore.getGameData().balance;
+
+    if (owned.level >= 105) {
+        showMessage(`${pokemonData.name} is already at max level!`, 'error');
+        return;
+    }
+
+    if (balance < cost) {
+        showMessage(`Not enough PBTC! Need ${cost} but you only have ${balance}.`, 'error');
+        return;
+    }
+
+    const confirmed = confirm(
+        `Level up ${pokemonData.name}?\n\n` +
+        `Current Level: ${owned.level}\n` +
+        `New Level: ${owned.level + 1}\n` +
+        `Cost: ${cost} PBTC\n\n` +
+        `This will increase all stats!`
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const result = localStore.levelUpPokemon(pokemonId);
+        showMessage(
+            `${pokemonData.name} leveled up to Level ${result.newLevel}! Stats increased!`,
+            'success'
+        );
+
+        // Refresh the display
+        loadCollectionStats();
+        loadCollection();
+    } catch (error) {
+        showMessage(error.message, 'error');
+    }
+}
+
+/**
+ * Show message to user
+ */
+function showMessage(message, type = 'info') {
+    const existing = document.querySelector('.collection-message');
+    if (existing) existing.remove();
+
+    const div = document.createElement('div');
+    div.className = `collection-message ${type}`;
+    div.textContent = message;
+
+    const container = document.querySelector('.collection-container');
+    container.insertBefore(div, container.firstChild);
+
+    setTimeout(() => div.remove(), 4000);
 }
 
 /**

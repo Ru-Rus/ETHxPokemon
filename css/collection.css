@@ -191,18 +191,21 @@
 
 .card-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: 1.5rem;
 }
 
 .action-btn {
     flex: 1;
+    min-width: 120px;
     padding: 0.8rem;
     border: none;
     border-radius: 12px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .action-btn.primary {
@@ -215,7 +218,25 @@
     color: var(--pokemon-dark-blue);
 }
 
-.action-btn:hover {
+.action-btn.level-up {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+    color: #000000;
+    border: 2px solid #FBBF24;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.action-btn.level-up:hover {
+    background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
+}
+
+.action-btn.disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.action-btn:hover:not(.disabled) {
     transform: scale(1.05);
 }
 
@@ -236,6 +257,45 @@
     font-size: 1.2rem;
     color: #666;
     margin-bottom: 2rem;
+}
+
+/* Collection Messages */
+.collection-message {
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: bold;
+    animation: slideDown 0.3s ease;
+}
+
+.collection-message.success {
+    background: linear-gradient(135deg, #1A3A1A 0%, #2A4A2A 100%);
+    color: #66BB6A;
+    border: 2px solid #4CAF50;
+}
+
+.collection-message.error {
+    background: linear-gradient(135deg, #3A1A1A 0%, #4A2A2A 100%);
+    color: #EF5350;
+    border: 2px solid #F44336;
+}
+
+.collection-message.info {
+    background: linear-gradient(135deg, #1A2A3A 0%, #2A3A4A 100%);
+    color: #64B5F6;
+    border: 2px solid #2196F3;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Mobile responsive */

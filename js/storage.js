@@ -205,6 +205,12 @@ function levelUpPokemon(pokemonId) {
         throw new Error('Pokemon not found!');
     }
 
+    // Check max level
+    const MAX_LEVEL = 105;
+    if (pokemon.level >= MAX_LEVEL) {
+        throw new Error(`${getPokemonById(pokemonId)?.name || 'Pokemon'} is already at max level (${MAX_LEVEL})!`);
+    }
+
     // Calculate cost (increases with level)
     const cost = Math.floor(GAME_CONFIG.LEVEL_UP_BASE_COST * Math.pow(GAME_CONFIG.LEVEL_UP_MULTIPLIER, pokemon.level - 5));
 
