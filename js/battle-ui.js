@@ -171,16 +171,14 @@ function startNextMatch() {
             }, 1000);
         }
     } else {
-        // Bot vs Bot - simulate
+        // Bot vs Bot - simulate (silent, no alerts)
         const winner = currentTournament.simulateBotMatch(match);
         currentTournament.recordMatchResult(winner);
 
-        // Show simulation result
+        // Auto-continue to next match without showing bot results
         setTimeout(() => {
-            alert(`Bot Match: ${match.player1.name} vs ${match.player2.name}\n\n` +
-                  `Winner: ${winner.name}`);
             startNextMatch();
-        }, 500);
+        }, 100);
     }
 }
 

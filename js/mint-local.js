@@ -61,7 +61,7 @@ function updateUI() {
     // Faucet button or countdown
     let faucetHTML;
     if (gameData.faucetStatus.canClaim) {
-        faucetHTML = '<button class="btn-primary faucet-btn btc-pulse" onclick="handleFaucet()" style="color: #000000 !important; font-weight: bold;">Claim 1,000 Coin</button>';
+        faucetHTML = '<button class="btn-primary faucet-btn btc-pulse" onclick="handleFaucet()" style="font-size: 1.1rem;">Claim 1,000 Coin</button>';
     } else {
         faucetHTML = `<div id="faucet-countdown" style="color: var(--crypto-yellow); font-weight: bold;"></div>`;
     }
@@ -78,7 +78,8 @@ function updateUI() {
         <div class="info-card">
             <div class="info-label">Faucet</div>
             <div class="info-value" style="font-size: 1rem;">
-                ${faucetHTML}
+                
+            ${faucetHTML}
             </div>
         </div>
     `;
