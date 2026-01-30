@@ -1,0 +1,368 @@
+/**
+ * BTC Website Theme - Crypto Gradient Style
+ * Purple, Neon Blue, Pink, and Yellow gradients
+ */
+
+:root {
+    /* Crypto Color Palette */
+    --crypto-purple: #8B5CF6;
+    --crypto-deep-purple: #6D28D9;
+    --crypto-blue: #3B82F6;
+    --crypto-neon-blue: #06B6D4;
+    --crypto-pink: #EC4899;
+    --crypto-hot-pink: #F472B6;
+    --crypto-yellow: #FBBF24;
+    --crypto-gold: #F59E0B;
+    --crypto-dark: #0F0A1E;
+    --crypto-darker: #070510;
+    --crypto-gray: #1E1B2E;
+    --crypto-light-gray: #9CA3AF;
+    --crypto-white: #FFFFFF;
+
+    /* Legacy aliases for compatibility */
+    --btc-orange: #EC4899;
+    --btc-dark: #0F0A1E;
+    --btc-darker: #070510;
+    --btc-gray: #1E1B2E;
+    --btc-light-gray: #9CA3AF;
+    --btc-white: #FFFFFF;
+    --btc-gold: #FBBF24;
+    --btc-light-orange: #F472B6;
+
+    --pokemon-red: #EC4899;
+    --pokemon-yellow: #FBBF24;
+    --pokemon-blue: #3B82F6;
+    --pokemon-light-blue: #06B6D4;
+    --pokemon-dark-blue: #6D28D9;
+    --pokemon-white: #FFFFFF;
+    --pokemon-black: #0F0A1E;
+    --pokemon-gray: #1E1B2E;
+    --card-shadow: rgba(139, 92, 246, 0.5);
+}
+
+/* Global Crypto Gradient Theme */
+body {
+    background: linear-gradient(135deg,
+        var(--crypto-darker) 0%,
+        var(--crypto-deep-purple) 25%,
+        var(--crypto-dark) 50%,
+        var(--crypto-deep-purple) 75%,
+        var(--crypto-darker) 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    color: var(--crypto-white);
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Header Crypto Style */
+header {
+    background: linear-gradient(90deg,
+        var(--crypto-purple) 0%,
+        var(--crypto-neon-blue) 50%,
+        var(--crypto-pink) 100%);
+    border-bottom: 3px solid var(--crypto-neon-blue);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.6);
+}
+
+.logo {
+    color: var(--crypto-yellow);
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.8),
+                 0 0 40px rgba(236, 72, 153, 0.6);
+    animation: logoGlow 2s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+    0%, 100% {
+        text-shadow: 0 0 20px rgba(251, 191, 36, 0.8),
+                     0 0 40px rgba(236, 72, 153, 0.6);
+    }
+    50% {
+        text-shadow: 0 0 30px rgba(251, 191, 36, 1),
+                     0 0 60px rgba(236, 72, 153, 0.9);
+    }
+}
+
+.nav-link {
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--crypto-neon-blue);
+}
+
+.nav-link:hover {
+    background: linear-gradient(135deg, var(--crypto-purple) 0%, var(--crypto-pink) 100%);
+    color: var(--crypto-white);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.8);
+}
+
+/* Hero Section Crypto */
+.hero {
+    background: linear-gradient(135deg,
+        var(--crypto-purple) 0%,
+        var(--crypto-pink) 50%,
+        var(--crypto-yellow) 100%);
+    border-bottom: 4px solid var(--crypto-neon-blue);
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.6);
+}
+
+/* Buttons Crypto Style */
+.btn-primary, .faucet-btn {
+    background: linear-gradient(135deg,
+        var(--crypto-purple) 0%,
+        var(--crypto-pink) 50%,
+        var(--crypto-neon-blue) 100%);
+    border: 2px solid var(--crypto-yellow);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.6);
+    color: #000000 !important;
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.btn-primary:hover, .faucet-btn:hover {
+    background: linear-gradient(135deg,
+        var(--crypto-pink) 0%,
+        var(--crypto-purple) 50%,
+        var(--crypto-yellow) 100%);
+    box-shadow: 0 6px 25px rgba(236, 72, 153, 0.8);
+    transform: translateY(-3px);
+    color: #000000 !important;
+}
+
+/* Cards Crypto Style */
+.pokemon-card, .mint-card, .collection-card {
+    background: linear-gradient(135deg,
+        var(--crypto-dark) 0%,
+        rgba(139, 92, 246, 0.1) 50%,
+        var(--crypto-gray) 100%);
+    border: 2px solid transparent;
+    border-image: linear-gradient(135deg,
+        var(--crypto-purple),
+        var(--crypto-neon-blue),
+        var(--crypto-pink)) 1;
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+}
+
+.pokemon-card:hover, .mint-card:hover, .collection-card:hover {
+    box-shadow: 0 12px 40px rgba(236, 72, 153, 0.6),
+                0 0 60px rgba(6, 182, 212, 0.4);
+    transform: translateY(-5px);
+}
+
+.pokemon-card h3, .pokemon-name, .pokemon-name-large {
+    background: linear-gradient(135deg,
+        var(--crypto-pink) 0%,
+        var(--crypto-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Info Cards Crypto Style */
+.info-card, .stat-box {
+    background: linear-gradient(135deg,
+        rgba(139, 92, 246, 0.2) 0%,
+        rgba(236, 72, 153, 0.2) 100%);
+    border-left: 4px solid var(--crypto-neon-blue);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.info-value, .stat-value {
+    background: linear-gradient(135deg,
+        var(--crypto-yellow) 0%,
+        var(--crypto-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Footer BTC Style */
+footer {
+    background: var(--crypto-darker);
+    border-top: 3px solid var(--crypto-purple);
+    color: var(--crypto-light-gray);
+}
+
+/* Text Readability Fixes */
+body, p, div, span, label {
+    color: var(--crypto-white);
+}
+
+.info-label, .stat-label {
+    color: var(--crypto-light-gray) !important;
+}
+
+.pokemon-level-display, .pokemon-level {
+    color: var(--crypto-neon-blue) !important;
+}
+
+.stat-name {
+    color: var(--crypto-light-gray) !important;
+}
+
+.move-details {
+    color: var(--crypto-light-gray) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--crypto-white);
+}
+
+.instructions {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+    border: 2px solid var(--crypto-purple);
+    color: var(--crypto-white);
+}
+
+.instructions h3 {
+    background: linear-gradient(135deg, var(--crypto-purple) 0%, var(--crypto-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.instructions li, .instructions p {
+    color: var(--crypto-light-gray);
+}
+
+/* Make sure all text is readable */
+.mint-price, .move-name {
+    color: var(--crypto-white) !important;
+}
+
+.waiting-message {
+    color: var(--crypto-white) !important;
+    background: rgba(139, 92, 246, 0.3);
+}
+
+.battle-log {
+    color: var(--crypto-white) !important;
+}
+
+/* Stat Bars BTC Style */
+.stat-fill, .stat-bar-fill {
+    background: linear-gradient(90deg, var(--btc-orange), var(--btc-gold));
+}
+
+/* Battle Arena BTC Style */
+.battle-arena {
+    background: linear-gradient(135deg, var(--btc-darker) 0%, var(--btc-dark) 100%);
+    border: 3px solid var(--btc-orange);
+}
+
+.pokemon-display {
+    background: rgba(26, 26, 29, 0.95);
+    border-color: var(--btc-orange);
+}
+
+/* Battle Log BTC Style */
+.battle-log {
+    background: rgba(13, 13, 15, 0.9);
+    border: 2px solid var(--btc-orange);
+}
+
+.battle-log-title {
+    color: var(--btc-orange);
+}
+
+/* Move Buttons BTC Style */
+.move-btn {
+    background: linear-gradient(135deg, var(--btc-orange) 0%, var(--btc-light-orange) 100%);
+    border: 2px solid var(--btc-gold);
+}
+
+.move-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--btc-gold) 0%, var(--btc-orange) 100%);
+    box-shadow: 0 0 15px rgba(247, 147, 26, 0.6);
+}
+
+/* Wallet Section BTC Style */
+.wallet-section, .collection-header, .difficulty-select, .pokemon-select {
+    background: linear-gradient(135deg, var(--btc-dark) 0%, #252527 100%);
+    border: 2px solid var(--btc-orange);
+}
+
+/* Difficulty Buttons BTC Theme */
+.difficulty-btn.easy {
+    background: linear-gradient(135deg, #4CAF50 0%, #45A049 100%);
+    border: 2px solid #66BB6A;
+}
+
+.difficulty-btn.medium {
+    background: linear-gradient(135deg, var(--btc-orange) 0%, var(--btc-light-orange) 100%);
+    border: 2px solid var(--btc-gold);
+}
+
+.difficulty-btn.hard {
+    background: linear-gradient(135deg, #F44336 0%, #E53935 100%);
+    border: 2px solid #EF5350;
+}
+
+/* Crypto Glow Effect */
+.btc-glow {
+    animation: cryptoGlow 3s ease-in-out infinite;
+}
+
+@keyframes cryptoGlow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.6),
+                    0 0 20px rgba(236, 72, 153, 0.4);
+    }
+    33% {
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.8),
+                    0 0 40px rgba(139, 92, 246, 0.6);
+    }
+    66% {
+        box-shadow: 0 0 20px rgba(236, 72, 153, 0.8),
+                    0 0 40px rgba(251, 191, 36, 0.6);
+    }
+}
+
+/* BTC Pulse Effect */
+.btc-pulse {
+    animation: btcPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes btcPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Instructions BTC Style */
+.instructions {
+    background: linear-gradient(135deg, var(--btc-dark) 0%, #2A2A2C 100%);
+    border: 2px solid var(--btc-orange);
+    color: var(--btc-light-gray);
+}
+
+.instructions h3 {
+    color: var(--btc-orange);
+}
+
+/* Text Colors */
+.stat-label, .info-label {
+    color: var(--btc-light-gray);
+}
+
+/* Messages */
+.success-message {
+    background: linear-gradient(135deg, #1A3A1A 0%, #2A4A2A 100%);
+    color: #66BB6A;
+    border: 2px solid #4CAF50;
+}
+
+.error-message {
+    background: linear-gradient(135deg, #3A1A1A 0%, #4A2A2A 100%);
+    color: #EF5350;
+    border: 2px solid #F44336;
+}
+
+/* Loading States */
+.loading {
+    color: var(--btc-orange);
+}

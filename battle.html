@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Arena - PokemonBTC</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/battle.css">
+    <link rel="stylesheet" href="css/btc-theme.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">⚡ PokemonBTC</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="mint.html" class="nav-link">Mint</a></li>
+                    <li><a href="battle.html" class="nav-link">Battle</a></li>
+                    <li><a href="collection.html" class="nav-link">Collection</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="battle-container">
+        <div id="battle-content">
+            <!-- Difficulty Selection -->
+            <div id="difficulty-select" class="difficulty-select">
+                <h2>Select Difficulty</h2>
+                <p style="color: #666; margin-bottom: 1rem;">
+                    Choose your opponent's strength level
+                </p>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn easy" onclick="selectDifficulty('easy')">
+                        EASY<br>
+                        <small>70% Stats | Random Moves</small>
+                    </button>
+                    <button class="difficulty-btn medium" onclick="selectDifficulty('medium')">
+                        MEDIUM<br>
+                        <small>100% Stats | 50% Smart</small>
+                    </button>
+                    <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">
+                        HARD<br>
+                        <small>120% Stats | 80% Optimal</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pokemon Selection -->
+            <div id="pokemon-select" class="pokemon-select">
+                <h2>Choose Your Pokemon</h2>
+                <div id="pokemon-select-grid" class="pokemon-select-grid">
+                    <!-- Pokemon cards will be inserted here -->
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn-primary" onclick="startBattle()" style="font-size: 1.3rem; padding: 1.2rem 3rem;">
+                        START BATTLE!
+                    </button>
+                </div>
+            </div>
+
+            <!-- Battle Arena -->
+            <div id="battle-arena" class="battle-arena" style="display: none;">
+                <!-- Battle Field -->
+                <div class="battle-field">
+                    <!-- Player Pokemon -->
+                    <div class="pokemon-display player">
+                        <img id="player-sprite" class="pokemon-sprite" src="" alt="Player Pokemon">
+                        <div class="pokemon-info">
+                            <div id="player-name" class="pokemon-name-display"></div>
+                            <div id="player-level" class="pokemon-level"></div>
+                            <div class="hp-bar-container">
+                                <div id="player-hp-bar" class="hp-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opponent Pokemon -->
+                    <div class="pokemon-display opponent">
+                        <img id="opponent-sprite" class="pokemon-sprite" src="" alt="Opponent Pokemon">
+                        <div class="pokemon-info">
+                            <div id="opponent-name" class="pokemon-name-display"></div>
+                            <div id="opponent-level" class="pokemon-level"></div>
+                            <div class="hp-bar-container">
+                                <div id="opponent-hp-bar" class="hp-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Battle Controls -->
+                <div class="battle-controls">
+                    <h3 style="text-align: center; margin-bottom: 1rem; color: var(--pokemon-dark-blue);">
+                        Select Your Move
+                    </h3>
+                    <div class="moves-grid">
+                        <!-- Moves will be inserted dynamically -->
+                    </div>
+                    <div id="waiting-message" class="waiting-message" style="display: none;">
+                        Waiting for opponent...
+                    </div>
+                </div>
+
+                <!-- Battle Log -->
+                <div class="battle-log">
+                    <div class="battle-log-title">Battle Log</div>
+                    <pre id="battle-log-text" style="white-space: pre-wrap; margin: 0;"></pre>
+                </div>
+
+                <!-- Battle Result -->
+                <div id="battle-result" class="battle-result" style="display: none;">
+                    <!-- Result will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 PokemonBTC. Battle on the blockchain!</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/pokemon-data.js"></script>
+    <script src="js/pokemon.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/battle-sounds.js"></script>
+    <script src="js/battle.js"></script>
+    <script src="js/tournament.js"></script>
+    <script src="js/battle-ui.js"></script>
+</body>
+</html>

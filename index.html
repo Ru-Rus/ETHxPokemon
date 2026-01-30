@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokemonBTC - Battle Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/btc-theme.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">⚡ PokemonBTC</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="mint.html" class="nav-link">Mint</a></li>
+                    <li><a href="battle.html" class="nav-link">Battle</a></li>
+                    <li><a href="collection.html" class="nav-link">Collection</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Welcome to PokemonBTC Battle Arena!</h2>
+                <p>Collect, battle, and train your Pokemon with Bitcoin-style gaming</p>
+                <div style="margin-top: 2rem;">
+                    <a href="mint.html" class="btn-primary" style="text-decoration: none; margin: 0.5rem;">Start Minting</a>
+                    <a href="battle.html" class="btn-primary" style="text-decoration: none; margin: 0.5rem;">Battle Now</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="pokemon-display">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: var(--pokemon-red);">Featured Pokemon</h2>
+                <div id="pokemon-container" class="pokemon-grid">
+                    <!-- Pokemon cards will be displayed here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 PokemonBTC. Battle on the blockchain!</p>
+        </div>
+    </footer>
+
+    <script src="js/pokemon-data.js"></script>
+    <script>
+        // Display featured Pokemon on home page
+        window.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('pokemon-container');
+            const allPokemon = getAllPokemon();
+
+            // Show first 12 Pokemon as featured
+            allPokemon.slice(0, 12).forEach(poke => {
+                const card = document.createElement('div');
+                card.className = 'pokemon-card';
+                card.style.animation = 'fadeIn 0.5s ease-in';
+                card.innerHTML = `
+                    <h3>${poke.name}</h3>
+                    <img src="${poke.sprite}" alt="${poke.name}" style="width: 120px; height: 120px; margin: 1rem auto; display: block; image-rendering: pixelated;">
+                    <div class="pokemon-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">HP</span>
+                            <span class="stat-value">${poke.baseStats.hp}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Attack</span>
+                            <span class="stat-value">${poke.baseStats.attack}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Defense</span>
+                            <span class="stat-value">${poke.baseStats.defense}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        });
+    </script>
+</body>
+</html>

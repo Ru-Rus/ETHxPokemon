@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mint Pokemon - PokemonBTC</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/btc-theme.css">
+    <style>
+        .mint-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .wallet-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .wallet-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-card {
+            background: var(--pokemon-gray);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--pokemon-blue);
+            
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--pokemon-red);
+        }
+
+        .connect-btn, .faucet-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            margin: 0.5rem;
+        }
+
+        .pokemon-mint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .mint-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 3px solid var(--pokemon-yellow);
+            position: relative;
+            text-align: center;
+        }
+
+        .mint-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .mint-card.minted {
+            opacity: 0.6;
+            border-color: #ccc;
+        }
+
+        .mint-card.minted::after {
+            content: "OWNED";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--pokemon-blue);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .pokemon-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            image-rendering: pixelated;
+        }
+
+        .pokemon-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--pokemon-red);
+            margin-bottom: 0.5rem;
+        }
+
+        .pokemon-types {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .type-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .stats-mini {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .stat-mini {
+            background: var(--pokemon-gray);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .mint-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--pokemon-blue);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mint-btn:hover:not(:disabled) {
+            background: var(--pokemon-dark-blue);
+            transform: scale(1.05);
+        }
+
+        .mint-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .mint-price {
+            font-size: 0.9rem;
+            color: var(--pokemon-blue);
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c00;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #060;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .instructions {
+            background: var(--pokemon-light-blue);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .instructions h3 {
+            color: var(--pokemon-dark-blue);
+            margin-bottom: 1rem;
+        }
+
+        .instructions ol {
+            margin-left: 1.5rem;
+        }
+
+        .instructions li, .instructions p {
+            margin: 0.5rem 0;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">⚡ PokemonBTC</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="mint.html" class="nav-link">Mint</a></li>
+                    <li><a href="battle.html" class="nav-link">Battle</a></li>
+                    <li><a href="collection.html" class="nav-link">Collection</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="mint-container">
+        <div class="wallet-section">
+            <h2>Your Account (Local Storage)</h2>
+            <div id="wallet-controls">
+                <!-- Player info will be inserted here -->
+            </div>
+            <div id="wallet-info" class="wallet-info">
+                <!-- Balance info will be inserted here -->
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>How to Mint Pokemon:</h3>
+            <ol>
+                <li><strong>Get Tokens:</strong> Click "Claim Faucet" to get 1,000 PBTC tokens (free every 1 minute!)</li>
+                <li><strong>Mint Pokemon:</strong> Each Pokemon costs 100 PBTC tokens to mint</li>
+                <li><strong>Build Collection:</strong> You start with 1,000 tokens - enough for 10 Pokemon!</li>
+                <li><strong>Battle:</strong> Use your minted Pokemon in battles (coming Day 2)!</li>
+            </ol>
+            <p><strong>Note:</strong> All data is stored locally in your browser. No blockchain needed!</p>
+        </div>
+
+        <div id="mint-content">
+            <div class="loading">
+                <p>Loading Pokemon...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 PokemonBTC. Battle on the blockchain!</p>
+        </div>
+    </footer>
+
+    <!-- Local Storage Version (No Blockchain) -->
+    <script src="js/pokemon-data.js"></script>
+    <script src="js/pokemon.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/daily-refresh.js"></script>
+    <script src="js/simple-captcha.js"></script>
+    <script src="js/mint-local.js"></script>
+</body>
+</html>
