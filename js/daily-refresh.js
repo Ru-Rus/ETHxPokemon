@@ -99,8 +99,11 @@ function shuffleArray(array) {
 function refreshPokemonList() {
     const allPokemon = getAllPokemon();
 
+    // Filter out reward-only Pokemon (they can only be obtained through battles)
+    const mintablePokemon = allPokemon.filter(p => !p.rewardOnly);
+
     // Shuffle and select 15 random Pokemon for today
-    const shuffled = shuffleArray(allPokemon);
+    const shuffled = shuffleArray(mintablePokemon);
     const todaysPokemon = shuffled.slice(0, 15).map(p => p.id);
 
     // Save to localStorage
@@ -155,6 +158,15 @@ function isPokemonAvailableToday(pokemonId) {
     return todaysIds.includes(pokemonId);
 }
 
+/**
+ * Force refresh Pokemon list (manual trigger)
+ * Used for keyboard shortcut or admin commands
+ */
+function forceRefresh() {
+    console.log('Force refreshing Pokemon list...');
+    return refreshPokemonList();
+}
+
 // Export functions
 window.dailyRefresh = {
     needsRefresh,
@@ -164,5 +176,6 @@ window.dailyRefresh = {
     isPokemonAvailableToday,
     getTimeUntilRefresh,
     formatTimeRemaining,
-    getNextRefreshTime
+    getNextRefreshTime,
+    forceRefresh
 };

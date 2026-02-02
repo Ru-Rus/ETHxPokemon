@@ -390,3 +390,26 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
 }
+
+/* Fix faucet button text visibility */
+.faucet-btn, .faucet-btn * {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    text-fill-color: #FFFFFF !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Fix countdown timer visibility */
+#faucet-countdown {
+    color: var(--crypto-yellow) !important;
+    font-weight: bold !important;
+    -webkit-text-fill-color: var(--crypto-yellow) !important;
+    text-shadow: 0 2px 8px rgba(251, 191, 36, 0.8) !important;
+}
+
+/* Ensure info-value children don't get transparent text */
+.info-value button,
+.info-value div {
+    -webkit-text-fill-color: initial !important;
+    background-clip: border-box !important;
+}
