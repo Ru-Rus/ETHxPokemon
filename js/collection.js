@@ -174,6 +174,9 @@ function createPokemonCard(pokemon, ownedData) {
                     Max Level
                 </button>
             `}
+            <button class="action-btn sell" onclick="sellPokemon(${pokemon.id})">
+                Sell (${localStore.calculateSellPrice(pokemon.level)} PBTC)
+            </button>
         </div>
     `;
 
@@ -225,6 +228,41 @@ function levelUpPokemon(pokemonId) {
         const result = localStore.levelUpPokemon(pokemonId);
         showMessage(
             `${pokemonData.name} leveled up to Level ${result.newLevel}! Stats increased!`,
+            'success'
+        );
+
+        // Refresh the display
+        loadCollectionStats();
+        loadCollection();
+    } catch (error) {
+        showMessage(error.message, 'error');
+    }
+}
+
+/**
+ * Sell a Pokemon
+ */
+function sellPokemon(pokemonId) {
+    const pokemonData = getPokemonById(pokemonId);
+    const owned = localStore.getOwnedPokemon().find(p => p.pokemonId === pokemonId);
+
+    if (!pokemonData || !owned) return;
+
+    const sellPrice = localStore.calculateSellPrice(owned.level);
+
+    const confirmed = confirm(
+        `Sell ${pokemonData.name}?\n\n` +
+        `Level: ${owned.level}\n` +
+        `Sell Price: ${sellPrice} PBTC\n\n` +
+        `This action cannot be undone!`
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const result = localStore.sellPokemon(pokemonId);
+        showMessage(
+            `Sold ${pokemonData.name} for ${result.soldPrice} PBTC! New balance: ${result.newBalance}`,
             'success'
         );
 

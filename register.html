@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - PokemonBTC</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/btc-theme.css">
+    <style>
+        .auth-container {
+            max-width: 500px;
+            margin: 4rem auto;
+            padding: 0 20px;
+        }
+
+        .auth-card {
+            background: linear-gradient(135deg, var(--crypto-dark) 0%, #252527 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+            border: 2px solid var(--crypto-purple);
+        }
+
+        .auth-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--crypto-pink) 0%, var(--crypto-yellow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--crypto-light-gray);
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--crypto-purple);
+            border-radius: 10px;
+            background: rgba(139, 92, 246, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--crypto-neon-blue);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+        }
+
+        .form-help {
+            font-size: 0.85rem;
+            color: var(--crypto-light-gray);
+            margin-top: 0.3rem;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            background: linear-gradient(135deg, var(--crypto-purple) 0%, var(--crypto-pink) 100%);
+            border: 2px solid var(--crypto-yellow);
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            background: linear-gradient(135deg, var(--crypto-pink) 0%, var(--crypto-purple) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.6);
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--crypto-light-gray);
+        }
+
+        .auth-switch a {
+            color: var(--crypto-yellow);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .error-msg {
+            background: linear-gradient(135deg, #3A1A1A 0%, #4A2A2A 100%);
+            color: #EF5350;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 2px solid #F44336;
+            display: none;
+        }
+
+        .success-msg {
+            background: linear-gradient(135deg, #1A3A1A 0%, #2A4A2A 100%);
+            color: #66BB6A;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 2px solid #4CAF50;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">⚡ PokemonBTC</h1>
+        </div>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <h2 class="auth-title">Register</h2>
+
+            <div id="error-msg" class="error-msg"></div>
+            <div id="success-msg" class="success-msg"></div>
+
+            <form id="register-form">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]+">
+                    <div class="form-help">3-20 characters, letters, numbers, and underscores only</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" required minlength="6">
+                    <div class="form-help">Minimum 6 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" id="confirm-password" class="form-input" required minlength="6">
+                </div>
+
+                <button type="submit" id="register-btn" class="auth-btn">Register</button>
+            </form>
+
+            <div class="auth-switch">
+                Already have an account? <a href="login.html">Login here</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 PokemonBTC. Battle on the blockchain!</p>
+        </div>
+    </footer>
+
+    <script src="js/api-service.js"></script>
+    <script>
+        const registerForm = document.getElementById('register-form');
+        const registerBtn = document.getElementById('register-btn');
+        const errorMsg = document.getElementById('error-msg');
+        const successMsg = document.getElementById('success-msg');
+
+        // Redirect if already logged in
+        if (apiService.isAuthenticated()) {
+            window.location.href = 'index.html';
+        }
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Hide messages
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                errorMsg.textContent = 'Passwords do not match';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Disable button
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Creating account...';
+
+            try {
+                const response = await apiService.register(username, password);
+
+                if (response.success) {
+                    successMsg.textContent = 'Account created! You start with 1,000 PBTC. Redirecting...';
+                    successMsg.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                }
+            } catch (error) {
+                errorMsg.textContent = error.message || 'Registration failed. Please try again.';
+                errorMsg.style.display = 'block';
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Register';
+            }
+        });
+    </script>
+</body>
+</html>

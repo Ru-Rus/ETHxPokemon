@@ -246,6 +246,76 @@ function getLevelUpCost(level) {
 }
 
 /**
+ * Calculate sell price for a Pokemon based on level
+ * Formula: Base price (50) + (level * 20)
+ */
+function calculateSellPrice(level) {
+    const basePrice = 50;
+    const levelBonus = level * 20;
+    return basePrice + levelBonus;
+}
+
+/**
+ * Sell a Pokemon
+ */
+function sellPokemon(pokemonId) {
+    const owned = getOwnedPokemon();
+    const pokemonIndex = owned.findIndex(p => p.pokemonId === pokemonId);
+
+    if (pokemonIndex === -1) {
+        throw new Error('Pokemon not found!');
+    }
+
+    const pokemon = owned[pokemonIndex];
+    const sellPrice = calculateSellPrice(pokemon.level);
+
+    // Remove Pokemon from owned list
+    owned.splice(pokemonIndex, 1);
+    localStorage.setItem(STORAGE_KEYS.OWNED_POKEMON, JSON.stringify(owned));
+
+    // Add tokens to balance
+    addTokens(sellPrice);
+
+    return {
+        success: true,
+        soldPrice: sellPrice,
+        newBalance: getTokenBalance()
+    };
+}
+
+/**
+ * Add reward Pokemon to collection
+ */
+function addRewardPokemon(pokemonId, level) {
+    // Check if already owned
+    if (ownsPokemon(pokemonId)) {
+        // If already owned, just return success (no duplicate)
+        return {
+            success: true,
+            alreadyOwned: true,
+            pokemon: { pokemonId, level }
+        };
+    }
+
+    // Add Pokemon to owned list
+    const owned = getOwnedPokemon();
+    const newPokemon = {
+        pokemonId: pokemonId,
+        mintedAt: Date.now(),
+        level: level,
+        experience: 0
+    };
+    owned.push(newPokemon);
+    localStorage.setItem(STORAGE_KEYS.OWNED_POKEMON, JSON.stringify(owned));
+
+    return {
+        success: true,
+        alreadyOwned: false,
+        pokemon: newPokemon
+    };
+}
+
+/**
  * Reset all data (for testing)
  */
 function resetAllData() {
@@ -283,6 +353,9 @@ window.localStore = {
     savePokemonData,
     levelUpPokemon,
     getLevelUpCost,
+    calculateSellPrice,
+    sellPokemon,
+    addRewardPokemon,
     resetAllData,
     getGameData,
     GAME_CONFIG

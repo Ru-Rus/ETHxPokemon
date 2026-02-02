@@ -230,6 +230,19 @@
     box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
 }
 
+.action-btn.sell {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: #FFFFFF;
+    border: 2px solid #F87171;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.action-btn.sell:hover {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+    transform: scale(1.05);
+}
+
 .action-btn.disabled {
     background: #ccc;
     color: #666;

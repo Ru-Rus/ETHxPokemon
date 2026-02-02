@@ -119,11 +119,14 @@ function startFaucetCountdown() {
  */
 function startRefreshTimer() {
     const timerEl = document.getElementById('next-refresh-timer');
-    if (!timerEl) return;
+    const displayEl = document.getElementById('next-refresh-display');
 
     const updateTimer = () => {
         const ms = dailyRefresh.getTimeUntilRefresh();
-        timerEl.textContent = dailyRefresh.formatTimeRemaining(ms);
+        const timeStr = dailyRefresh.formatTimeRemaining(ms);
+
+        if (timerEl) timerEl.textContent = timeStr;
+        if (displayEl) displayEl.textContent = timeStr;
     };
 
     updateTimer();
@@ -259,4 +262,49 @@ function showSuccess(message) {
 // Initialize on page load
 window.addEventListener('DOMContentLoaded', () => {
     initializePage();
+
+    // Start automatic refresh check (runs every minute)
+    startAutoRefreshCheck();
+});
+
+/**
+ * Start automatic refresh check
+ * Checks every minute if it's time to refresh the Pokemon list
+ */
+function startAutoRefreshCheck() {
+    setInterval(() => {
+        if (dailyRefresh.needsRefresh()) {
+            console.log('Auto-refresh triggered at 8AM!');
+
+            // Refresh the Pokemon list
+            dailyRefresh.refreshPokemonList();
+
+            // Show notification
+            showSuccess('🌅 Good Morning! New Pokemon are now available!');
+
+            // Reload the UI
+            updateUI();
+            loadPokemonGrid();
+        }
+    }, 60000); // Check every 60 seconds (1 minute)
+}
+
+// Keyboard shortcut: Ctrl + Shift + Enter to force refresh Pokemon list
+window.addEventListener('keydown', (event) => {
+    // Check if Ctrl + Shift + Enter is pressed
+    if (event.ctrlKey && event.shiftKey && event.key === 'Enter') {
+        event.preventDefault(); // Prevent default behavior
+
+        // Force refresh the Pokemon list
+        dailyRefresh.forceRefresh();
+
+        // Show notification
+        showSuccess('🔄 Pokemon list refreshed! New Pokemon are now available.');
+
+        // Reload the UI
+        updateUI();
+        loadPokemonGrid();
+
+        console.log('Pokemon list manually refreshed via keyboard shortcut!');
+    }
 });

@@ -189,11 +189,26 @@ function showTournamentResult() {
     const status = currentTournament.getStatus();
 
     if (status.winner === currentTournament.playerPokemon) {
-        // Player won tournament!
+        // Player won tournament! Give reward Pokemon
+        const reward = getRandomReward(selectedDifficulty);
+        const rewardPokemonData = getPokemonById(reward.pokemonId);
+
+        // Add reward Pokemon to collection
+        const result = localStore.addRewardPokemon(reward.pokemonId, reward.level);
+
         battleSounds.playVictory();
+
+        let rewardMessage = '';
+        if (result.alreadyOwned) {
+            rewardMessage = `\nYou already own ${rewardPokemonData.name}, so no new Pokemon was added.`;
+        } else {
+            rewardMessage = `\n\n🎁 REWARD: You received ${rewardPokemonData.name} (Level ${reward.level})!`;
+        }
+
         alert('🏆 TOURNAMENT CHAMPION! 🏆\n\n' +
-              'You defeated all opponents and won the tournament!\n\n' +
-              'Congratulations!');
+              'You defeated all opponents and won the tournament!' +
+              rewardMessage +
+              '\n\nCongratulations!');
     } else {
         // Player lost
         battleSounds.playDefeat();

@@ -1,3 +1,19 @@
 
 # Ignore contract build i can do it as of now
 .contracts/
+.claude/
+
+# Backend - Node modules and environment
+backend/node_modules/
+backend/.env
+backend/package-lock.json
+
+# Logs
+backend/*.log
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
