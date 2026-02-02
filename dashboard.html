@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PokemonBTC</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/btc-theme.css">
+    <style>
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, var(--crypto-dark) 0%, #252527 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid var(--crypto-purple);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--crypto-pink) 0%, var(--crypto-yellow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--crypto-purple);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--crypto-yellow) 0%, var(--crypto-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--crypto-light-gray);
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, var(--crypto-dark) 0%, #252527 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid var(--crypto-purple);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.6);
+            border-color: var(--crypto-neon-blue);
+        }
+
+        .action-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-title {
+            font-size: 1.5rem;
+            color: var(--crypto-yellow);
+            margin-bottom: 0.5rem;
+        }
+
+        .action-desc {
+            color: var(--crypto-light-gray);
+        }
+
+        .battle-stats-section {
+            background: linear-gradient(135deg, var(--crypto-dark) 0%, #252527 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid var(--crypto-purple);
+        }
+
+        .battle-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .battle-stat-card {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .difficulty-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-easy { background: #4CAF50; color: white; }
+        .difficulty-medium { background: #FF9800; color: white; }
+        .difficulty-hard { background: #F44336; color: white; }
+
+        .win-rate {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--crypto-yellow);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">⚡ PokemonBTC</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="mint.html" class="nav-link">Mint</a></li>
+                    <li><a href="battle.html" class="nav-link">Battle</a></li>
+                    <li><a href="collection.html" class="nav-link">Collection</a></li>
+                    <li><a href="#" class="nav-link" onclick="logout(event)">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- Loading Screen -->
+        <div id="loading-screen" style="text-align: center; padding: 4rem;">
+            <div style="font-size: 4rem;">⚡</div>
+            <p style="font-size: 1.5rem; color: var(--crypto-yellow);">Loading your data...</p>
+        </div>
+
+        <!-- Dashboard Content (hidden until loaded) -->
+        <div id="dashboard-content" style="display: none;">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">Welcome back, <span id="username"></span>!</h1>
+                <p style="color: var(--crypto-light-gray); font-size: 1.2rem;">
+                    Ready to catch 'em all?
+                </p>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <div class="stat-box">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="balance">0</div>
+                    <div class="stat-label">PBTC Balance</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-icon">🎮</div>
+                    <div class="stat-value" id="total-pokemon">0</div>
+                    <div class="stat-label">Pokemon Owned</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-value" id="total-wins">0</div>
+                    <div class="stat-label">Total Wins</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="win-rate">0%</div>
+                    <div class="stat-label">Win Rate</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem; color: var(--crypto-yellow);">
+                Quick Actions
+            </h2>
+            <div class="quick-actions">
+                <a href="mint.html" class="action-card">
+                    <div class="action-icon">🎮</div>
+                    <div class="action-title">Mint Pokemon</div>
+                    <div class="action-desc">Collect new Pokemon for 100 PBTC each</div>
+                </a>
+
+                <a href="battle.html" class="action-card">
+                    <div class="action-icon">⚔️</div>
+                    <div class="action-title">Battle Arena</div>
+                    <div class="action-desc">Challenge opponents and earn rewards</div>
+                </a>
+
+                <a href="collection.html" class="action-card">
+                    <div class="action-icon">📚</div>
+                    <div class="action-title">My Collection</div>
+                    <div class="action-desc">View and manage your Pokemon</div>
+                </a>
+            </div>
+
+            <!-- Battle Statistics -->
+            <div class="battle-stats-section">
+                <h2 style="text-align: center; margin-bottom: 1.5rem; font-size: 2rem; color: var(--crypto-yellow);">
+                    Battle Statistics
+                </h2>
+                <div class="battle-stats-grid">
+                    <div class="battle-stat-card">
+                        <div class="difficulty-badge difficulty-easy">EASY</div>
+                        <div style="margin: 1rem 0;">
+                            <div style="color: #4CAF50; font-size: 1.5rem; font-weight: bold;" id="easy-wins">0</div>
+                            <div style="color: var(--crypto-light-gray);">Wins</div>
+                        </div>
+                        <div>
+                            <div style="color: #F44336; font-size: 1.5rem; font-weight: bold;" id="easy-losses">0</div>
+                            <div style="color: var(--crypto-light-gray);">Losses</div>
+                        </div>
+                    </div>
+
+                    <div class="battle-stat-card">
+                        <div class="difficulty-badge difficulty-medium">MEDIUM</div>
+                        <div style="margin: 1rem 0;">
+                            <div style="color: #4CAF50; font-size: 1.5rem; font-weight: bold;" id="medium-wins">0</div>
+                            <div style="color: var(--crypto-light-gray);">Wins</div>
+                        </div>
+                        <div>
+                            <div style="color: #F44336; font-size: 1.5rem; font-weight: bold;" id="medium-losses">0</div>
+                            <div style="color: var(--crypto-light-gray);">Losses</div>
+                        </div>
+                    </div>
+
+                    <div class="battle-stat-card">
+                        <div class="difficulty-badge difficulty-hard">HARD</div>
+                        <div style="margin: 1rem 0;">
+                            <div style="color: #4CAF50; font-size: 1.5rem; font-weight: bold;" id="hard-wins">0</div>
+                            <div style="color: var(--crypto-light-gray);">Wins</div>
+                        </div>
+                        <div>
+                            <div style="color: #F44336; font-size: 1.5rem; font-weight: bold;" id="hard-losses">0</div>
+                            <div style="color: var(--crypto-light-gray);">Losses</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 PokemonBTC. Battle on the blockchain!</p>
+        </div>
+    </footer>
+
+    <script src="js/api-service.js"></script>
+    <script>
+        // Check authentication
+        if (!apiService.requireAuth()) {
+            // Will redirect to login if not authenticated
+        }
+
+        // Logout function
+        function logout(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                apiService.logout();
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const response = await apiService.getCurrentUser();
+
+                if (response.success) {
+                    const user = response.user;
+
+                    // Update username
+                    document.getElementById('username').textContent = user.username;
+
+                    // Update stats
+                    document.getElementById('balance').textContent = user.balance.toLocaleString();
+                    document.getElementById('total-pokemon').textContent = user.ownedPokemon.length;
+                    document.getElementById('total-wins').textContent = user.totalWins;
+                    document.getElementById('win-rate').textContent = user.winRate + '%';
+
+                    // Update battle stats
+                    document.getElementById('easy-wins').textContent = user.battleStats.easy.wins;
+                    document.getElementById('easy-losses').textContent = user.battleStats.easy.losses;
+                    document.getElementById('medium-wins').textContent = user.battleStats.medium.wins;
+                    document.getElementById('medium-losses').textContent = user.battleStats.medium.losses;
+                    document.getElementById('hard-wins').textContent = user.battleStats.hard.wins;
+                    document.getElementById('hard-losses').textContent = user.battleStats.hard.losses;
+
+                    // Show dashboard content
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('dashboard-content').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                alert('Failed to load dashboard. Please try again.');
+            }
+        }
+
+        // Load on page load
+        window.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>

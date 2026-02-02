@@ -223,10 +223,11 @@
             <h1 class="logo">⚡ PokemonBTC</h1>
             <nav>
                 <ul class="nav-links">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
                     <li><a href="mint.html" class="nav-link">Mint</a></li>
                     <li><a href="battle.html" class="nav-link">Battle</a></li>
                     <li><a href="collection.html" class="nav-link">Collection</a></li>
+                    <li><a href="#" class="nav-link" onclick="logout(event)">Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -273,6 +274,11 @@
         </div>
     </footer>
 
+    <!-- Authentication & Loading -->
+    <script src="js/api-service.js"></script>
+    <script src="js/auth-check.js"></script>
+    <script src="js/loading.js"></script>
+
     <!-- Local Storage Version (No Blockchain) -->
     <script src="js/pokemon-data.js"></script>
     <script src="js/pokemon.js"></script>
@@ -280,5 +286,15 @@
     <script src="js/daily-refresh.js"></script>
     <script src="js/simple-captcha.js"></script>
     <script src="js/mint-local.js"></script>
+
+    <script>
+        // Logout function
+        function logout(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                apiService.logout();
+            }
+        }
+    </script>
 </body>
 </html>

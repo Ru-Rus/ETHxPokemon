@@ -3,41 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokemonBTC - Battle Game</title>
+    <title>PokemonBTC - Battle & Collect Pokemon</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/btc-theme.css">
+    <style>
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--crypto-deep-purple) 0%, var(--crypto-dark) 50%, var(--crypto-deep-purple) 100%);
+            border-bottom: 4px solid var(--crypto-neon-blue);
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--crypto-pink) 0%, var(--crypto-yellow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--crypto-light-gray);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 1.2rem 3rem;
+            font-size: 1.3rem;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .cta-btn.primary {
+            background: linear-gradient(135deg, var(--crypto-purple) 0%, var(--crypto-pink) 100%);
+            color: white;
+            border: 2px solid var(--crypto-yellow);
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            color: var(--crypto-yellow);
+            border: 2px solid var(--crypto-yellow);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.5);
+        }
+
+        .features {
+            padding: 4rem 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, var(--crypto-dark) 0%, #252527 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid var(--crypto-purple);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.6);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            color: var(--crypto-yellow);
+            margin-bottom: 1rem;
+        }
+
+        .feature-desc {
+            color: var(--crypto-light-gray);
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            padding: 4rem 2rem;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--crypto-pink) 0%, var(--crypto-yellow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--crypto-light-gray);
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="container">
             <h1 class="logo">⚡ PokemonBTC</h1>
-            <nav>
+            <nav id="main-nav">
                 <ul class="nav-links">
-                    <li><a href="mint.html" class="nav-link">Mint</a></li>
-                    <li><a href="battle.html" class="nav-link">Battle</a></li>
-                    <li><a href="collection.html" class="nav-link">Collection</a></li>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="register.html" class="nav-link" id="register-link">Register</a></li>
+                    <li><a href="login.html" class="nav-link" id="login-link">Login</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section class="hero">
             <div class="container">
-                <h2>Welcome to PokemonBTC Battle Arena!</h2>
-                <p>Collect, battle, and train your Pokemon with Bitcoin-style gaming</p>
-                <div style="margin-top: 2rem;">
-                    <a href="mint.html" class="btn-primary" style="text-decoration: none; margin: 0.5rem;">Start Minting</a>
-                    <a href="battle.html" class="btn-primary" style="text-decoration: none; margin: 0.5rem;">Battle Now</a>
+                <h1 class="hero-title">PokemonBTC</h1>
+                <p class="hero-subtitle">Collect, Battle, and Train Pokemon in the Ultimate Web3 Experience</p>
+                <div class="cta-buttons">
+                    <a href="register.html" class="cta-btn primary">Get Started Free</a>
+                    <a href="login.html" class="cta-btn secondary">Login</a>
                 </div>
             </div>
         </section>
 
-        <section class="pokemon-display">
+        <!-- Features Section -->
+        <section class="features">
             <div class="container">
-                <h2 style="text-align: center; margin-bottom: 2rem; color: var(--pokemon-red);">Featured Pokemon</h2>
-                <div id="pokemon-container" class="pokemon-grid">
-                    <!-- Pokemon cards will be displayed here -->
+                <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem; color: var(--crypto-yellow);">
+                    Game Features
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎮</div>
+                        <h3 class="feature-title">Mint Pokemon</h3>
+                        <p class="feature-desc">
+                            Collect your favorite Pokemon! Each costs 100 PBTC tokens. Daily rotation of 15 available Pokemon keeps the game fresh.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">⚔️</div>
+                        <h3 class="feature-title">Battle System</h3>
+                        <p class="feature-desc">
+                            Engage in strategic turn-based battles with AI opponents. Choose difficulty: Easy, Medium, or Hard. Win to earn rare Pokemon!
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3 class="feature-title">Level Up System</h3>
+                        <p class="feature-desc">
+                            Train your Pokemon by spending PBTC to level them up. Higher levels mean stronger stats and better battle performance!
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3 class="feature-title">Earn PBTC</h3>
+                        <p class="feature-desc">
+                            Claim free PBTC from the faucet every minute! Sell Pokemon you don't want. Price based on level!
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3 class="feature-title">Battle Stats</h3>
+                        <p class="feature-desc">
+                            Track your wins and losses by difficulty. Build your reputation as a Pokemon master with detailed statistics!
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🎁</div>
+                        <h3 class="feature-title">Reward Pokemon</h3>
+                        <p class="feature-desc">
+                            Win battles to receive exclusive reward-only Pokemon! These legendary Pokemon can't be minted - only earned!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem; color: var(--crypto-yellow);">
+                    By The Numbers
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">30+</div>
+                        <div class="stat-label">Pokemon Available</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Difficulty Levels</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1,000</div>
+                        <div class="stat-label">Starting PBTC</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">Free</div>
+                        <div class="stat-label">To Play Forever</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="hero" style="padding: 4rem 2rem;">
+            <div class="container">
+                <h2 style="font-size: 2.5rem; color: var(--crypto-yellow); margin-bottom: 1.5rem;">
+                    Ready to Start Your Journey?
+                </h2>
+                <p style="font-size: 1.3rem; color: var(--crypto-light-gray); margin-bottom: 2rem;">
+                    Create your account now and get 1,000 PBTC tokens to start collecting!
+                </p>
+                <div class="cta-buttons">
+                    <a href="register.html" class="cta-btn primary">Create Account</a>
                 </div>
             </div>
         </section>
@@ -49,38 +281,14 @@
         </div>
     </footer>
 
-    <script src="js/pokemon-data.js"></script>
+    <script src="js/api-service.js"></script>
     <script>
-        // Display featured Pokemon on home page
+        // Check if user is logged in
         window.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('pokemon-container');
-            const allPokemon = getAllPokemon();
-
-            // Show first 12 Pokemon as featured
-            allPokemon.slice(0, 12).forEach(poke => {
-                const card = document.createElement('div');
-                card.className = 'pokemon-card';
-                card.style.animation = 'fadeIn 0.5s ease-in';
-                card.innerHTML = `
-                    <h3>${poke.name}</h3>
-                    <img src="${poke.sprite}" alt="${poke.name}" style="width: 120px; height: 120px; margin: 1rem auto; display: block; image-rendering: pixelated;">
-                    <div class="pokemon-stats">
-                        <div class="stat-row">
-                            <span class="stat-label">HP</span>
-                            <span class="stat-value">${poke.baseStats.hp}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Attack</span>
-                            <span class="stat-value">${poke.baseStats.attack}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Defense</span>
-                            <span class="stat-value">${poke.baseStats.defense}</span>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+            if (apiService.isAuthenticated()) {
+                // User is logged in, redirect to dashboard
+                window.location.href = 'dashboard.html';
+            }
         });
     </script>
 </body>
