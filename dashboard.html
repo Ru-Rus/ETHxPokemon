@@ -280,11 +280,37 @@
         </div>
     </footer>
 
+    <!-- Configuration -->
+    <script src="js/config.js"></script>
     <script src="js/api-service.js"></script>
+
     <script>
-        // Check authentication
-        if (!apiService.requireAuth()) {
-            // Will redirect to login if not authenticated
+        // Load required scripts based on mode
+        const mode = APP_CONFIG.MODE;
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
+        }
+
+        async function init() {
+            // Check authentication
+            if (!apiService.requireAuth()) {
+                // Will redirect to login if not authenticated
+            }
+
+            // Load mode-specific scripts
+            if (mode === 'local') {
+                await loadScript('js/storage.js');
+            }
+
+            // Load dashboard logic
+            await loadScript('js/dashboard.js');
         }
 
         // Logout function
@@ -295,43 +321,8 @@
             }
         }
 
-        // Load dashboard data
-        async function loadDashboard() {
-            try {
-                const response = await apiService.getCurrentUser();
-
-                if (response.success) {
-                    const user = response.user;
-
-                    // Update username
-                    document.getElementById('username').textContent = user.username;
-
-                    // Update stats
-                    document.getElementById('balance').textContent = user.balance.toLocaleString();
-                    document.getElementById('total-pokemon').textContent = user.ownedPokemon.length;
-                    document.getElementById('total-wins').textContent = user.totalWins;
-                    document.getElementById('win-rate').textContent = user.winRate + '%';
-
-                    // Update battle stats
-                    document.getElementById('easy-wins').textContent = user.battleStats.easy.wins;
-                    document.getElementById('easy-losses').textContent = user.battleStats.easy.losses;
-                    document.getElementById('medium-wins').textContent = user.battleStats.medium.wins;
-                    document.getElementById('medium-losses').textContent = user.battleStats.medium.losses;
-                    document.getElementById('hard-wins').textContent = user.battleStats.hard.wins;
-                    document.getElementById('hard-losses').textContent = user.battleStats.hard.losses;
-
-                    // Show dashboard content
-                    document.getElementById('loading-screen').style.display = 'none';
-                    document.getElementById('dashboard-content').style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-                alert('Failed to load dashboard. Please try again.');
-            }
-        }
-
-        // Load on page load
-        window.addEventListener('DOMContentLoaded', loadDashboard);
+        // Initialize
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

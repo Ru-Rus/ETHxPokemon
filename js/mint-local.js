@@ -31,25 +31,36 @@ const TYPE_COLORS = {
 /**
  * Initialize the page
  */
-function initializePage() {
-    updateUI();
+async function initializePage() {
+    await updateUI();
     loadPokemonGrid();
 }
 
 /**
  * Update UI with current balance and info
  */
-function updateUI() {
+async function updateUI() {
     const gameData = localStore.getGameData();
     userBalance = gameData.balance;
     ownedPokemonIds = new Set(gameData.ownedPokemon.map(p => p.pokemonId));
+
+    // Get username from API
+    let username = gameData.userId;
+    try {
+        const userResponse = await apiService.getCurrentUser();
+        if (userResponse.success && userResponse.user) {
+            username = userResponse.user.username;
+        }
+    } catch (error) {
+        console.log('Could not fetch username from API, using userId');
+    }
 
     const walletControls = document.getElementById('wallet-controls');
     const walletInfo = document.getElementById('wallet-info');
 
     walletControls.innerHTML = `
         <p style="color: var(--btc-orange); font-size: 1.1rem; margin-bottom: 1rem;">
-            Player ID: <strong>${gameData.userId}</strong>
+            Player: <strong>${username}</strong>
         </p>
         <div style="color: var(--btc-light-gray); font-size: 0.9rem; margin-top: 0.5rem;">
             Next refresh: <strong id="next-refresh-timer" style="color: var(--btc-orange);"></strong>
@@ -289,7 +300,7 @@ function startAutoRefreshCheck() {
     }, 60000); // Check every 60 seconds (1 minute)
 }
 
-// Keyboard shortcut: Ctrl + Shift + Enter to force refresh Pokemon list
+// Keyboard shortcut: Ctrl + Shift + Enter to force refresh Pokemon list AND faucet
 window.addEventListener('keydown', (event) => {
     // Check if Ctrl + Shift + Enter is pressed
     if (event.ctrlKey && event.shiftKey && event.key === 'Enter') {
@@ -298,13 +309,16 @@ window.addEventListener('keydown', (event) => {
         // Force refresh the Pokemon list
         dailyRefresh.forceRefresh();
 
+        // Force reset faucet
+        localStore.resetFaucet();
+
         // Show notification
-        showSuccess('🔄 Pokemon list refreshed! New Pokemon are now available.');
+        showSuccess('🔄 Pokemon list & Faucet refreshed! New Pokemon available and faucet ready to claim.');
 
         // Reload the UI
         updateUI();
         loadPokemonGrid();
 
-        console.log('Pokemon list manually refreshed via keyboard shortcut!');
+        console.log('Pokemon list and faucet manually refreshed via keyboard shortcut!');
     }
 });

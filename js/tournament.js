@@ -111,6 +111,9 @@ class Tournament {
         if (!winners.includes(this.playerPokemon)) {
             this.isComplete = true;
             this.winner = null; // Player lost
+
+            // Complete remaining tournament to find winner
+            this.completeRemainingMatches(winners);
             return;
         }
 
@@ -191,6 +194,79 @@ class Tournament {
                 winner: m.winner ? m.winner.name : 'TBD'
             }))
         }));
+    }
+
+    /**
+     * Complete remaining tournament matches (when player loses)
+     * Simulates all remaining matches to determine final winner
+     */
+    completeRemainingMatches(currentRoundWinners) {
+        // First, complete any remaining matches in the CURRENT round
+        const currentRound = this.bracket[this.currentRound];
+        const allRoundWinners = [...currentRoundWinners];
+
+        // Simulate any unfinished matches in current round
+        for (let match of currentRound.matches) {
+            if (!match.winner) {
+                const winner = this.simulateBotMatch(match);
+                match.winner = winner;
+                allRoundWinners.push(winner);
+
+                this.matchHistory.push({
+                    round: this.currentRound + 1,
+                    match: currentRound.matches.indexOf(match) + 1,
+                    player1: match.player1.name,
+                    player2: match.player2.name,
+                    winner: winner.name
+                });
+            }
+        }
+
+        // Now simulate all future rounds
+        let remainingPlayers = allRoundWinners;
+        let currentRoundIndex = this.currentRound + 1;
+
+        // Continue tournament until we have a winner
+        while (remainingPlayers.length > 1 && currentRoundIndex < this.bracket.length) {
+            const nextRound = this.bracket[currentRoundIndex];
+            nextRound.matches = [];
+
+            // Create matches for next round
+            const nextRoundWinners = [];
+            for (let i = 0; i < remainingPlayers.length; i += 2) {
+                if (i + 1 < remainingPlayers.length) {
+                    const match = {
+                        player1: remainingPlayers[i],
+                        player2: remainingPlayers[i + 1],
+                        winner: null
+                    };
+
+                    // Simulate match
+                    const winner = this.simulateBotMatch(match);
+                    match.winner = winner;
+                    nextRoundWinners.push(winner);
+
+                    nextRound.matches.push(match);
+
+                    // Record in history
+                    this.matchHistory.push({
+                        round: currentRoundIndex + 1,
+                        match: (i / 2) + 1,
+                        player1: match.player1.name,
+                        player2: match.player2.name,
+                        winner: winner.name
+                    });
+                }
+            }
+
+            remainingPlayers = nextRoundWinners;
+            currentRoundIndex++;
+        }
+
+        // Set final winner
+        if (remainingPlayers.length === 1) {
+            this.winner = remainingPlayers[0];
+        }
     }
 }
 
