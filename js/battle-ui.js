@@ -227,15 +227,34 @@ function showTournamentResult() {
         <div class="result-details">
             ${status.winner === currentTournament.playerPokemon ?
                 'You defeated all opponents and won the tournament!' :
-                'You were eliminated from the tournament.'
+                `You were eliminated from the tournament.${status.winner ? '<br>Tournament Winner: ' + status.winner.name : ''}`
             }
         </div>
         <div class="result-actions">
+            <button class="btn-primary" onclick="showBracketUI()">📊 View Tournament Bracket</button>
             <button class="btn-primary" onclick="resetBattle()">New Tournament</button>
             <button class="btn-primary" onclick="location.href='collection.html'">My Collection</button>
         </div>
     `;
     resultDiv.style.display = 'block';
+
+    // Auto-show bracket after a delay
+    setTimeout(() => {
+        if (typeof TournamentBracketUI !== 'undefined') {
+            TournamentBracketUI.showBracket(currentTournament);
+        }
+    }, 1000);
+}
+
+/**
+ * Show tournament bracket UI
+ */
+function showBracketUI() {
+    if (currentTournament && typeof TournamentBracketUI !== 'undefined') {
+        TournamentBracketUI.showBracket(currentTournament);
+    } else {
+        alert('Tournament bracket not available');
+    }
 }
 
 /**

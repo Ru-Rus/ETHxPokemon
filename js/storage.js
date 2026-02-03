@@ -82,17 +82,48 @@ function subtractTokens(amount) {
 }
 
 /**
- * Check if can claim faucet
+ * Check if can claim faucet (resets daily at 8AM)
  */
 function canClaimFaucet() {
     const lastClaim = localStorage.getItem(STORAGE_KEYS.LAST_FAUCET);
     if (!lastClaim) return { canClaim: true, timeRemaining: 0 };
 
-    const timeSinceLastClaim = Date.now() - parseInt(lastClaim);
-    const canClaim = timeSinceLastClaim >= GAME_CONFIG.FAUCET_COOLDOWN;
-    const timeRemaining = canClaim ? 0 : Math.ceil((GAME_CONFIG.FAUCET_COOLDOWN - timeSinceLastClaim) / 1000);
+    const lastClaimDate = new Date(parseInt(lastClaim));
+    const now = new Date();
+
+    // Get today's 8AM
+    const today8AM = new Date(now);
+    today8AM.setHours(8, 0, 0, 0);
+
+    // Get tomorrow's 8AM
+    const tomorrow8AM = new Date(today8AM);
+    tomorrow8AM.setDate(tomorrow8AM.getDate() + 1);
+
+    // Check if last claim was before today's 8AM
+    let canClaim = false;
+    let nextResetTime;
+
+    if (now >= today8AM) {
+        // We're past today's 8AM
+        canClaim = lastClaimDate < today8AM;
+        nextResetTime = tomorrow8AM;
+    } else {
+        // We're before today's 8AM
+        canClaim = lastClaimDate < today8AM;
+        nextResetTime = today8AM;
+    }
+
+    const timeRemaining = canClaim ? 0 : Math.ceil((nextResetTime - now) / 1000);
 
     return { canClaim, timeRemaining };
+}
+
+/**
+ * Force reset faucet (for manual refresh via keyboard shortcut)
+ */
+function resetFaucet() {
+    localStorage.removeItem(STORAGE_KEYS.LAST_FAUCET);
+    console.log('Faucet manually reset!');
 }
 
 /**
@@ -346,6 +377,7 @@ window.localStore = {
     subtractTokens,
     canClaimFaucet,
     claimFaucet,
+    resetFaucet,
     getOwnedPokemon,
     ownsPokemon,
     mintPokemon,

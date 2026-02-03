@@ -235,30 +235,21 @@
 
     <main class="mint-container">
         <div class="wallet-section">
-            <h2>Your Account (Local Storage)</h2>
+            <h2 id="wallet-title">Your Wallet</h2>
             <div id="wallet-controls">
-                <!-- Player info will be inserted here -->
+                <!-- Content will be loaded based on mode -->
             </div>
-            <div id="wallet-info" class="wallet-info">
+            <div id="wallet-info" class="wallet-info" style="display: none;">
                 <!-- Balance info will be inserted here -->
             </div>
-            <div style="text-align: center; margin-top: 1rem; padding: 1rem; background: rgba(139, 92, 246, 0.1); border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.3);">
+            <div id="refresh-timer" style="display: none; text-align: center; margin-top: 1rem; padding: 1rem; background: rgba(139, 92, 246, 0.1); border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.3);">
                 <span style="color: var(--crypto-light-gray); font-size: 0.9rem;">🔄 Next Pokemon Refresh: </span>
                 <strong id="next-refresh-display" style="color: var(--crypto-yellow); font-size: 1.1rem;"></strong>
             </div>
         </div>
 
-        <div class="instructions">
-            <h3>How to Mint Pokemon:</h3>
-            <ol>
-                <li><strong>Get Tokens:</strong> Click "Claim Faucet" to get 1,000 PBTC tokens (free every 1 minute!)</li>
-                <li><strong>Mint Pokemon:</strong> Each Pokemon costs 100 PBTC tokens to mint</li>
-                <li><strong>Build Collection:</strong> You start with 1,000 tokens - enough for 10 Pokemon!</li>
-                <li><strong>Battle:</strong> Use your minted Pokemon in battles!</li>
-                <li><strong>Daily Refresh:</strong> Pokemon list refreshes every day at 8:00 AM (15 random Pokemon)</li>
-            </ol>
-            <p><strong>Note:</strong> All data is stored locally in your browser. No blockchain needed!</p>
-            <!-- <p style="margin-top: 0.5rem;"><strong>💡 Tip:</strong> Press <code style="background: rgba(139, 92, 246, 0.2); padding: 2px 6px; border-radius: 4px; color: var(--crypto-yellow);">Ctrl + Shift + Enter</code> to manually refresh the Pokemon list!</p> -->
+        <div class="instructions" id="instructions-section">
+            <!-- Instructions will be loaded based on mode -->
         </div>
 
         <div id="mint-content">
@@ -274,20 +265,119 @@
         </div>
     </footer>
 
+    <!-- Configuration -->
+    <script src="js/config.js"></script>
+
     <!-- Authentication & Loading -->
     <script src="js/api-service.js"></script>
     <script src="js/auth-check.js"></script>
     <script src="js/loading.js"></script>
 
-    <!-- Local Storage Version (No Blockchain) -->
-    <script src="js/pokemon-data.js"></script>
-    <script src="js/pokemon.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/daily-refresh.js"></script>
-    <script src="js/simple-captcha.js"></script>
-    <script src="js/mint-local.js"></script>
-
+    <!-- Dynamic Script Loader Based on Config -->
     <script>
+        // Load scripts based on APP_CONFIG.MODE
+        const mode = APP_CONFIG.MODE;
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
+        }
+
+        function setupUI() {
+            const walletTitle = document.getElementById('wallet-title');
+            const walletControls = document.getElementById('wallet-controls');
+            const instructionsSection = document.getElementById('instructions-section');
+            const refreshTimer = document.getElementById('refresh-timer');
+
+            if (mode === 'blockchain') {
+                // Blockchain mode UI
+                walletTitle.textContent = 'Your Wallet';
+                walletControls.innerHTML = '<button class="btn-primary connect-btn" onclick="handleConnect()">Connect MetaMask</button>';
+                refreshTimer.style.display = 'none';
+
+                instructionsSection.innerHTML = `
+                    <h3>How to Mint Pokemon NFTs:</h3>
+                    <ol>
+                        <li><strong>Connect MetaMask:</strong> Click "Connect MetaMask" and approve the connection</li>
+                        <li><strong>Get Test Tokens:</strong> Click "Claim Faucet" to get 1,000 PBTC tokens (free every 24 hours!)</li>
+                        <li><strong>Mint Pokemon:</strong> Each Pokemon NFT costs 100 PBTC tokens to mint</li>
+                        <li><strong>Approve Transaction:</strong> MetaMask will ask you to approve twice - once for token spending, once for minting</li>
+                        <li><strong>Battle:</strong> Use your minted Pokemon NFTs in battles!</li>
+                    </ol>
+                    <p><strong>Note:</strong> All NFTs are minted on Sepolia testnet. Make sure you have Sepolia ETH for gas fees!</p>
+                    <p style="background: #e3f2fd; padding: 10px; border-radius: 5px; margin-top: 10px;"><strong>🔧 Mode:</strong> Blockchain (Sepolia) - Change in <code>js/config.js</code></p>
+                `;
+            } else {
+                // Local storage mode UI
+                walletTitle.textContent = 'Your Account (Local Storage)';
+                walletControls.innerHTML = '<!-- Player info will be inserted here -->';
+                refreshTimer.style.display = 'block';
+
+                instructionsSection.innerHTML = `
+                    <h3>How to Mint Pokemon:</h3>
+                    <ol>
+                        <li><strong>Get Tokens:</strong> Click "Claim Faucet" to get 1,000 PBTC tokens (free every 1 minute!)</li>
+                        <li><strong>Mint Pokemon:</strong> Each Pokemon costs 100 PBTC tokens to mint</li>
+                        <li><strong>Build Collection:</strong> You start with 1,000 tokens - enough for 10 Pokemon!</li>
+                        <li><strong>Battle:</strong> Use your minted Pokemon in battles!</li>
+                        <li><strong>Daily Refresh:</strong> Pokemon list refreshes every day at 8:00 AM (15 random Pokemon)</li>
+                    </ol>
+                    <p><strong>Note:</strong> All data is stored locally in your browser. No blockchain needed!</p>
+                    <p style="background: #e3f2fd; padding: 10px; border-radius: 5px; margin-top: 10px;"><strong>🔧 Mode:</strong> Local Storage - Change in <code>js/config.js</code></p>
+                `;
+            }
+        }
+
+        async function loadModeScripts() {
+            // Set up UI first
+            setupUI();
+
+            // Common scripts
+            await loadScript('js/pokemon-data.js');
+            await loadScript('js/pokemon.js');
+
+            if (mode === 'blockchain') {
+                // Blockchain mode
+                console.log('🔗 Loading BLOCKCHAIN mode...');
+                await loadScript('https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js');
+                await loadScript('js/web3.js');
+                await loadScript('js/mint.js');
+                console.log('✅ Blockchain mode loaded');
+
+                // Initialize blockchain mode (if wallet already connected)
+                if (typeof web3Utils !== 'undefined' && web3Utils.isMetaMaskInstalled() && window.ethereum.selectedAddress) {
+                    setTimeout(() => handleConnect(), 100);
+                }
+            } else {
+                // Local storage mode
+                console.log('💾 Loading LOCAL STORAGE mode...');
+                await loadScript('js/storage.js');
+                await loadScript('js/daily-refresh.js');
+                await loadScript('js/simple-captcha.js');
+                await loadScript('js/mint-local.js');
+                console.log('✅ Local storage mode loaded');
+
+                // Initialize local mode manually since DOMContentLoaded already fired
+                if (typeof initializePage === 'function') {
+                    initializePage();
+                    startAutoRefreshCheck();
+                } else {
+                    console.error('initializePage function not found');
+                }
+            }
+        }
+
+        // Load scripts when page loads
+        loadModeScripts().catch(err => {
+            console.error('Failed to load scripts:', err);
+            alert('Failed to load application scripts. Please refresh the page.');
+        });
+
         // Logout function
         function logout(event) {
             event.preventDefault();

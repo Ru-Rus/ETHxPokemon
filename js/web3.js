@@ -4,11 +4,14 @@
  * Based on PokeChain and Pokemon-Blockchain implementations
  */
 
-// Contract addresses (UPDATE THESE after deployment)
-const CONTRACT_ADDRESSES = {
+// Contract addresses - loaded from config.js
+const CONTRACT_ADDRESSES = window.APP_CONFIG?.CONTRACTS || {
     token: '0x0000000000000000000000000000000000000000', // PokemonToken address
     nft: '0x0000000000000000000000000000000000000000'    // PokemonNFT address
 };
+
+
+
 
 // Contract ABIs (simplified - include only functions we use)
 const TOKEN_ABI = [
