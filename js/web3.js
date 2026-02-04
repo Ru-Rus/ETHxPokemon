@@ -4,17 +4,15 @@
  * Based on PokeChain and Pokemon-Blockchain implementations
  */
 
-
-// TOKEN
-// 0xD646B8F82C95Cf49B48F742dbB128Ecaba642ECd
-
-// NFT
-// 0x69d6F6eC74c4F8D04Ff7447Eb8E35529bae66808
+// Check if ethers is loaded
+if (typeof ethers === 'undefined') {
+    console.error('Ethers library not loaded! Make sure the ethers script is included before web3.js');
+}
 
 // Contract addresses - loaded from config.js
 const CONTRACT_ADDRESSES = window.APP_CONFIG?.CONTRACTS || {
     token: '0xD646B8F82C95Cf49B48F742dbB128Ecaba642ECd', // PokemonToken address
-    nft: '0x69d6F6eC74c4F8D04Ff7447Eb8E35529bae66808'    // PokemonNFT address
+    nft: '0x3c771Bcc5339b9d5b4EC425722Ec67D41A73A2EB'    // PokemonNFT address
 };
 
 
@@ -61,6 +59,10 @@ function isMetaMaskInstalled() {
  * @returns {Promise<string>} User address
  */
 async function connectWallet() {
+    if (typeof ethers === 'undefined') {
+        throw new Error('Ethers library not loaded');
+    }
+
     if (!isMetaMaskInstalled()) {
         alert('Please install MetaMask to use this feature!\nVisit: https://metamask.io');
         throw new Error('MetaMask not installed');
@@ -73,6 +75,48 @@ async function connectWallet() {
         });
 
         userAddress = accounts[0];
+
+        // Check if on correct network
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        const expectedChainId = '0x' + APP_CONFIG.NETWORK.chainId.toString(16);
+        
+        if (chainId !== expectedChainId) {
+            try {
+                // Try to switch to Sepolia
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: expectedChainId }],
+                });
+                console.log('Switched to Sepolia network');
+            } catch (switchError) {
+                // If network doesn't exist, add it
+                if (switchError.code === 4902) {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: expectedChainId,
+                                chainName: APP_CONFIG.NETWORK.name,
+                                rpcUrls: [APP_CONFIG.NETWORK.rpcUrl],
+                                nativeCurrency: {
+                                    name: 'SepoliaETH',
+                                    symbol: 'ETH',
+                                    decimals: 18
+                                },
+                                blockExplorerUrls: ['https://sepolia.etherscan.io/']
+                            }],
+                        });
+                        console.log('Added Sepolia network');
+                    } catch (addError) {
+                        alert('Please switch to Sepolia testnet in MetaMask');
+                        throw new Error('Please switch to Sepolia testnet');
+                    }
+                } else {
+                    alert('Please switch to Sepolia testnet in MetaMask');
+                    throw new Error('Please switch to Sepolia testnet');
+                }
+            }
+        }
 
         // Initialize ethers provider
         provider = new ethers.BrowserProvider(window.ethereum);
@@ -312,6 +356,43 @@ async function getTotalSupply() {
 }
 
 /**
+ * Get user's NFT token IDs
+ * @returns {Promise<Array<number>>} Array of token IDs
+ */
+async function getUserNFTs() {
+    if (!nftContract || !userAddress) {
+        throw new Error('Contract not initialized or wallet not connected');
+    }
+
+    try {
+        const tokenIds = await nftContract.tokensOfOwner(userAddress);
+        return tokenIds.map(id => Number(id));
+    } catch (error) {
+        console.error('Error getting user NFTs:', error);
+        throw error;
+    }
+}
+
+/**
+ * Get Pokemon ID from token ID
+ * @param {number} tokenId - NFT token ID
+ * @returns {Promise<number>} Pokemon ID
+ */
+async function getPokemonIdFromToken(tokenId) {
+    if (!nftContract) {
+        throw new Error('Contract not initialized');
+    }
+
+    try {
+        const pokemonId = await nftContract.getPokemonId(tokenId);
+        return Number(pokemonId);
+    } catch (error) {
+        console.error('Error getting Pokemon ID from token:', error);
+        throw error;
+    }
+}
+
+/**
  * Format address for display
  * @param {string} address - Ethereum address
  * @returns {string} Formatted address (0x1234...5678)
@@ -339,19 +420,26 @@ function formatTimeRemaining(seconds) {
 }
 
 // Export functions for global use
-window.web3Utils = {
-    isMetaMaskInstalled,
-    connectWallet,
-    disconnectWallet,
-    getTokenBalance,
-    claimFaucet,
-    checkFaucetStatus,
-    mintPokemon,
-    getOwnedPokemon,
-    hasMintedPokemon,
-    getTotalSupply,
-    formatAddress,
-    formatTimeRemaining,
-    get isConnected() { return isConnected; },
-    get userAddress() { return userAddress; }
-};
+try {
+    window.web3Utils = {
+        isMetaMaskInstalled,
+        connectWallet,
+        disconnectWallet,
+        getTokenBalance,
+        claimFaucet,
+        checkFaucetStatus,
+        mintPokemon,
+        getOwnedPokemon,
+        hasMintedPokemon,
+        getTotalSupply,
+        getUserNFTs,
+        getPokemonIdFromToken,
+        formatAddress,
+        formatTimeRemaining,
+        get isConnected() { return isConnected; },
+        get userAddress() { return userAddress; }
+    };
+    console.log('web3Utils loaded successfully');
+} catch (error) {
+    console.error('Error loading web3Utils:', error);
+}

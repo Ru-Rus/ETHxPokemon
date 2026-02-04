@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/collection.css">
     <link rel="stylesheet" href="css/btc-theme.css">
+    <script src="js/config.js"></script>
 </head>
 <body>
     <header>
@@ -53,13 +54,49 @@
     <script src="js/auth-check.js"></script>
     <script src="js/loading.js"></script>
 
-    <!-- Scripts -->
-    <script src="js/pokemon-data.js"></script>
-    <script src="js/pokemon.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/collection.js"></script>
-
+    <!-- Dynamic Script Loader Based on Config -->
     <script>
+        // Load scripts based on APP_CONFIG.MODE
+        const mode = APP_CONFIG.MODE;
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
+        }
+
+        async function loadModeScripts() {
+            // Common scripts
+            await loadScript('js/pokemon-data.js');
+            await loadScript('js/pokemon.js');
+            await loadScript('js/storage.js'); // Always needed for balance management
+
+            if (mode === 'blockchain') {
+                // Blockchain mode
+                console.log('🔗 Loading BLOCKCHAIN mode for collection...');
+                await loadScript('https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js');
+                await loadScript('js/web3.js');
+                console.log('✅ Blockchain mode loaded for collection');
+            } else {
+                // Local storage mode
+                console.log('💾 Loading LOCAL STORAGE mode for collection...');
+                console.log('✅ Local storage mode loaded for collection');
+            }
+
+            // Always load collection scripts
+            await loadScript('js/collection.js');
+        }
+
+        // Load scripts when page loads
+        loadModeScripts().catch(err => {
+            console.error('Failed to load scripts:', err);
+            alert('Failed to load application scripts. Please refresh the page.');
+        });
+
         // Logout function
         function logout(event) {
             event.preventDefault();

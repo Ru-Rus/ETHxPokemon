@@ -13,7 +13,7 @@ const APP_CONFIG = {
     // Contract addresses (only used in blockchain mode)
     CONTRACTS: {
         token: '0xD646B8F82C95Cf49B48F742dbB128Ecaba642ECd',  // Replace with deployed PokemonToken address
-        nft: '0x69d6F6eC74c4F8D04Ff7447Eb8E35529bae66808'        // Replace with deployed PokemonNFT address
+        nft: '0x3c771Bcc5339b9d5b4EC425722Ec67D41A73A2EB'        // Replace with deployed PokemonNFT address
     },
 
     // Network configuration

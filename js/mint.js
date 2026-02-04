@@ -37,6 +37,11 @@ async function handleConnect() {
     btn.textContent = 'Connecting...';
 
     try {
+        // Check if web3Utils is available
+        if (typeof web3Utils === 'undefined') {
+            throw new Error('web3Utils is not defined - web3.js may not have loaded properly');
+        }
+
         const address = await web3Utils.connectWallet();
         console.log('Wallet connected:', address);
 
