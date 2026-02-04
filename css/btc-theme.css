@@ -337,6 +337,267 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+/* Enhanced Crypto Animations */
+.crypto-float {
+    animation: cryptoFloat 6s ease-in-out infinite;
+}
+
+@keyframes cryptoFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-10px) rotate(1deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(0deg);
+    }
+    75% {
+        transform: translateY(-10px) rotate(-1deg);
+    }
+}
+
+.crypto-shimmer {
+    position: relative;
+    overflow: hidden;
+}
+
+.crypto-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.crypto-particle {
+    position: relative;
+    overflow: hidden;
+}
+
+.crypto-particle::after {
+    content: '₿';
+    position: absolute;
+    font-size: 20px;
+    color: var(--crypto-yellow);
+    animation: particleFloat 8s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) translateX(0px) rotate(0deg);
+        opacity: 0;
+    }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% {
+        transform: translateY(-100px) translateX(50px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Enhanced Button Effects */
+.btn-primary, .faucet-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before, .faucet-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary:hover::before, .faucet-btn:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Card Hover Effects */
+.pokemon-card, .mint-card, .collection-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+}
+
+.pokemon-card:hover, .mint-card:hover, .collection-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(236, 72, 153, 0.8),
+                0 0 80px rgba(6, 182, 212, 0.6),
+                0 0 120px rgba(139, 92, 246, 0.4);
+}
+
+/* Neon Border Animation */
+.neon-border {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(var(--crypto-dark), var(--crypto-dark)) padding-box,
+                linear-gradient(45deg, var(--crypto-purple), var(--crypto-neon-blue), var(--crypto-pink)) border-box;
+    animation: neonRotate 4s linear infinite;
+}
+
+@keyframes neonRotate {
+    0% { background-position: 0% 0%; }
+    25% { background-position: 100% 0%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+/* Holographic Effect */
+.holographic {
+    background: linear-gradient(45deg,
+        var(--crypto-purple),
+        var(--crypto-neon-blue),
+        var(--crypto-pink),
+        var(--crypto-yellow),
+        var(--crypto-purple));
+    background-size: 400% 400%;
+    animation: holographicShift 3s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+@keyframes holographicShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Matrix Rain Effect */
+.matrix-rain {
+    position: relative;
+    overflow: hidden;
+}
+
+.matrix-rain::before {
+    content: '0101001001010010010100100101001001010010';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--crypto-neon-blue);
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 20px;
+    opacity: 0.1;
+    animation: matrixFall 10s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes matrixFall {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+}
+
+/* Cyberpunk Glitch Effect */
+.glitch {
+    position: relative;
+    animation: glitch 2s linear infinite;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    animation: glitch-1 0.5s infinite;
+    color: var(--crypto-pink);
+    z-index: -1;
+}
+
+.glitch::after {
+    animation: glitch-2 0.5s infinite;
+    color: var(--crypto-neon-blue);
+    z-index: -2;
+}
+
+@keyframes glitch-1 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+}
+
+@keyframes glitch-2 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(2px, -2px); }
+    40% { transform: translate(2px, 2px); }
+    60% { transform: translate(-2px, -2px); }
+    80% { transform: translate(-2px, 2px); }
+}
+
+/* Enhanced Loading Animation */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--crypto-dark);
+    border-top: 4px solid var(--crypto-neon-blue);
+    border-radius: 50%;
+    animation: cryptoSpin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes cryptoSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Pulse Ring Effect */
+.pulse-ring {
+    position: relative;
+}
+
+.pulse-ring::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--crypto-neon-blue);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulseRing 2s ease-out infinite;
+}
+
+@keyframes pulseRing {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+}
+
 /* Instructions BTC Style */
 .instructions {
     background: linear-gradient(135deg, var(--btc-dark) 0%, #2A2A2C 100%);
