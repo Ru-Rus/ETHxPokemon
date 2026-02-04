@@ -4,10 +4,17 @@
  * Based on PokeChain and Pokemon-Blockchain implementations
  */
 
+
+// TOKEN
+// 0xD646B8F82C95Cf49B48F742dbB128Ecaba642ECd
+
+// NFT
+// 0x69d6F6eC74c4F8D04Ff7447Eb8E35529bae66808
+
 // Contract addresses - loaded from config.js
 const CONTRACT_ADDRESSES = window.APP_CONFIG?.CONTRACTS || {
-    token: '0x0000000000000000000000000000000000000000', // PokemonToken address
-    nft: '0x0000000000000000000000000000000000000000'    // PokemonNFT address
+    token: '0xD646B8F82C95Cf49B48F742dbB128Ecaba642ECd', // PokemonToken address
+    nft: '0x69d6F6eC74c4F8D04Ff7447Eb8E35529bae66808'    // PokemonNFT address
 };
 
 
