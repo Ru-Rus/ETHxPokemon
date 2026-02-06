@@ -511,27 +511,28 @@ function createPokemonCard(pokemon, ownedData) {
             <button class="action-btn secondary" onclick="viewPokemonDetails(${pokemon.id})">
                 Details
             </button>
-            ${pokemon.level < 100 ? `
-                <button class="action-btn level-up" onclick="levelUpPokemon(${pokemon.id})">
-                    Level Up (${getLevelUpCost(pokemon.level)} PBTC)
-                </button>
-            ` : `
-                <button class="action-btn disabled" disabled>
-                    Max Level
-                </button>
-            `}
-            ${window.APP_CONFIG && window.APP_CONFIG.MODE === 'blockchain' ? `
-                <button class="action-btn sell" onclick="sellPokemon(${pokemon.id})">
-                    Remove from Game (+${calculateSellPrice(pokemon.level)} PBTC)
-                </button>
-            ` : `
-                <button class="action-btn sell" onclick="sellPokemon(${pokemon.id})">
-                    Sell (${calculateSellPrice(pokemon.level)} PBTC)
-                </button>
-            `}
+
         </div>
     `;
 
+            //     ${pokemon.level < 100 ? `
+            //     <button class="action-btn level-up" onclick="levelUpPokemon(${pokemon.id})">
+            //         Level Up (${getLevelUpCost(pokemon.level)} PBTC)
+            //     </button>
+            // ` : `
+            //     <button class="action-btn disabled" disabled>
+            //         Max Level
+            //     </button>
+            // `}
+            // ${window.APP_CONFIG && window.APP_CONFIG.MODE === 'blockchain' ? `
+            //     <button class="action-btn sell" onclick="sellPokemon(${pokemon.id})">
+            //         Remove from Game (+${calculateSellPrice(pokemon.level)} PBTC)
+            //     </button>
+            // ` : `
+            //     <button class="action-btn sell" onclick="sellPokemon(${pokemon.id})">
+            //         Sell (${calculateSellPrice(pokemon.level)} PBTC)
+            //     </button>
+            // `}
     return card;
 }
 

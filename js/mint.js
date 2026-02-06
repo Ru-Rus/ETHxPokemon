@@ -79,20 +79,24 @@ async function updateWalletUI() {
                 <div class="info-label">PBTC Balance</div>
                 <div class="info-value">${parseFloat(balance).toFixed(2)}</div>
             </div>
-            <div class="info-card">
-                <div class="info-label">Faucet Status</div>
-                <div class="info-value" style="font-size: 1rem;">
-                    ${faucetStatus.canClaim ?
-                        '<button class="btn-primary faucet-btn" onclick="handleFaucet()">Claim 1,000 PBTC</button>' :
-                        `Cooldown: ${web3Utils.formatTimeRemaining(faucetStatus.cooldownSeconds)}`
-                    }
-                </div>
-            </div>
+           
         `;
     } catch (error) {
         console.error('Error updating wallet UI:', error);
     }
 }
+//  <div class="info-card">
+//                 <div class="info-label">Faucet Status</div>
+//                 <div class="info-value" style="font-size: 1rem;">
+//                     ${faucetStatus.canClaim ?
+//                         '<button class="btn-primary faucet-btn" onclick="handleFaucet()">Claim 1,000 PBTC</button>' :
+//                         `Cooldown: ${web3Utils.formatTimeRemaining(faucetStatus.cooldownSeconds)}`
+//                     }
+//                 </div>
+//             </div>
+
+
+
 
 /**
  * Handle faucet claim
@@ -128,6 +132,16 @@ async function loadMintablePokemons() {
 
         // Get all Pokemon from database
         const allPokemon = getAllPokemon();
+
+        // // Function to get 20 random Pokemon
+        // function getRandomPokemon(pokemonList, count) {
+        //     const shuffled = pokemonList.sort(() => 0.5 - Math.random());
+        //     return shuffled.slice(0, count);
+        // }
+
+        // // Get 20 random Pokemon
+        // const randomPokemon = getRandomPokemon(allPokemon, 12);
+
 
         // Create grid
         let html = '<div class="pokemon-mint-grid">';
