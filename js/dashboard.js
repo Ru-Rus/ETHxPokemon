@@ -24,30 +24,36 @@ async function loadDashboard() {
 async function loadLocalDashboard() {
     const gameData = localStore.getGameData();
 
-    // Ensure battleHistory exists
-    const battleHistory = gameData.battleHistory || [];
-
-    // Calculate statistics
-    const totalWins = battleHistory.filter(b => b.result === 'win').length;
-    const totalLosses = battleHistory.filter(b => b.result === 'loss').length;
-    const totalBattles = totalWins + totalLosses;
-    const winRate = totalBattles > 0 ? Math.round((totalWins / totalBattles) * 100) : 0;
-
-    // Calculate battle stats by difficulty
-    const battleStats = {
+    // Use proper battle stats structure (same as MongoDB schema)
+    let battleStats = gameData.battleStats || {
         easy: { wins: 0, losses: 0 },
         medium: { wins: 0, losses: 0 },
         hard: { wins: 0, losses: 0 }
     };
 
-    battleHistory.forEach(battle => {
-        const difficulty = battle.difficulty || 'easy';
-        if (battle.result === 'win') {
-            battleStats[difficulty].wins++;
-        } else if (battle.result === 'loss') {
-            battleStats[difficulty].losses++;
-        }
-    });
+    // Fallback: if old battleHistory exists but battleStats doesn't, compute from history
+    if (!gameData.battleStats && gameData.battleHistory) {
+        battleStats = {
+            easy: { wins: 0, losses: 0 },
+            medium: { wins: 0, losses: 0 },
+            hard: { wins: 0, losses: 0 }
+        };
+
+        gameData.battleHistory.forEach(battle => {
+            const difficulty = battle.difficulty || 'easy';
+            if (battle.result === 'win') {
+                battleStats[difficulty].wins++;
+            } else if (battle.result === 'loss') {
+                battleStats[difficulty].losses++;
+            }
+        });
+    }
+
+    // Calculate totals
+    const totalWins = battleStats.easy.wins + battleStats.medium.wins + battleStats.hard.wins;
+    const totalLosses = battleStats.easy.losses + battleStats.medium.losses + battleStats.hard.losses;
+    const totalBattles = totalWins + totalLosses;
+    const winRate = totalBattles > 0 ? Math.round((totalWins / totalBattles) * 100) : 0;
 
     // Get username from API
     let username = 'Player';

@@ -918,10 +918,65 @@ function executeBotTurn() {
 }
 
 /**
+ * Record battle result to database
+ */
+async function recordBattleResult(won) {
+    const mode = window.APP_CONFIG?.MODE || 'local';
+
+    if (mode === 'blockchain') {
+        // Record to MongoDB via API
+        try {
+            const result = await apiService.recordBattleResult(selectedDifficulty, won);
+            console.log('Battle result recorded to server:', result);
+        } catch (error) {
+            console.warn('Failed to record battle result to server:', error);
+        }
+    } else {
+        // Record to local storage - update battle stats by difficulty
+        const gameData = localStore.getGameData();
+        
+        // Initialize battleStats if it doesn't exist
+        if (!gameData.battleStats) {
+            gameData.battleStats = {
+                easy: { wins: 0, losses: 0 },
+                medium: { wins: 0, losses: 0 },
+                hard: { wins: 0, losses: 0 }
+            };
+        }
+
+        // Update the stats for this difficulty
+        if (won) {
+            gameData.battleStats[selectedDifficulty].wins++;
+        } else {
+            gameData.battleStats[selectedDifficulty].losses++;
+        }
+
+        // Also keep battle history for reference
+        if (!gameData.battleHistory) {
+            gameData.battleHistory = [];
+        }
+
+        gameData.battleHistory.push({
+            difficulty: selectedDifficulty,
+            result: won ? 'win' : 'loss',
+            timestamp: new Date().toISOString(),
+            opponentName: currentBattle ? currentBattle.opponent.name : 'Unknown'
+        });
+
+        localStore.saveGameData(gameData);
+        console.log('Battle result saved to local storage. Stats:', gameData.battleStats);
+    }
+}
+
+
+/**
  * Show battle result (for individual match)
  */
 function showBattleResult(winner) {
     const isVictory = winner === 'player';
+
+    // Record battle result to server/local storage
+    recordBattleResult(isVictory);
 
     // Play sound
     if (isVictory) {
