@@ -28,6 +28,39 @@ const TYPE_COLORS = {
     'Fairy': '#EE99AC'
 };
 
+
+
+const DAILY_KEY = 'daily_mint_pokemon';
+const DAILY_DATE_KEY = 'daily_mint_date';
+const REFRESH_HOUR = 8;
+
+function getTodayKey() {
+    const now = new Date();
+    if (now.getHours() < REFRESH_HOUR) {
+        now.setDate(now.getDate() - 1);
+    }
+    return now.toISOString().split('T')[0];
+}
+
+function getDailyPokemon(allPokemon, count = 12) {
+    const todayKey = getTodayKey();
+    const savedDate = localStorage.getItem(DAILY_DATE_KEY);
+    const savedIds = JSON.parse(localStorage.getItem(DAILY_KEY) || '[]');
+
+    if (savedDate === todayKey && savedIds.length) {
+        return savedIds.map(id => allPokemon.find(p => p.id === id)).filter(Boolean);
+    }
+
+    const shuffled = [...allPokemon].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, count);
+
+    localStorage.setItem(DAILY_DATE_KEY, todayKey);
+    localStorage.setItem(DAILY_KEY, JSON.stringify(selected.map(p => p.id)));
+
+    return selected;
+}
+
+
 /**
  * Handle wallet connection
  */
@@ -134,20 +167,22 @@ async function loadMintablePokemons() {
         // Get all Pokemon from database
         const allPokemon = getAllPokemon();
 
-        // // Function to get 20 random Pokemon
-        // function getRandomPokemon(pokemonList, count) {
-        //     const shuffled = pokemonList.sort(() => 0.5 - Math.random());
-        //     return shuffled.slice(0, count);
-        // }
+        // Function to get 12 random Pokemon
+        function getRandomPokemon(pokemonList, count) {
+            const shuffled = pokemonList.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
 
-        // // Get 20 random Pokemon
-        // const randomPokemon = getRandomPokemon(allPokemon, 12);
+        // Get 20 random Pokemon
+        const randomPokemon = getDailyPokemon(allPokemon, 12);
+
+       // const randomPokemon = getRandomPokemon(allPokemon, 12);
 
 
         // Create grid
         let html = '<div class="pokemon-mint-grid">';
 
-        for (const poke of allPokemon) {
+        for (const poke of randomPokemon) {
             const isMinted = mintedPokemon.has(poke.id);
             const canAfford = parseFloat(userBalance) >= 100;
 
@@ -291,3 +326,12 @@ window.addEventListener('DOMContentLoaded', async () => {
         await handleConnect();
     }
 });
+
+
+//hard reset 
+setInterval(() => {
+    const todayKey = getTodayKey();
+    if (localStorage.getItem(DAILY_DATE_KEY) !== todayKey) {
+        loadMintablePokemons();
+    }
+}, 60000);
