@@ -69,9 +69,10 @@ async function updateWalletUI() {
 
         walletControls.innerHTML = `
             <p style="color: var(--pokemon-blue); font-size: 1.1rem; margin-bottom: 1rem;">
-                Connected: <strong>${web3Utils.formatAddress(web3Utils.userAddress)}</strong>
+            Connected: <strong>${web3Utils.formatAddress(web3Utils.userAddress)}</strong>
             </p>
         `;
+        // 
 
         walletInfo.style.display = 'flex';
         walletInfo.innerHTML = `

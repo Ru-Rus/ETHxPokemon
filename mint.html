@@ -296,7 +296,7 @@
 
             if (mode === 'blockchain') {
                 // Blockchain mode UI
-                walletTitle.textContent = 'Your Wallet';
+               walletTitle.textContent = 'Your Wallet'; walletTitle.style.color = 'red';
                 walletControls.innerHTML = '<button class="btn-primary connect-btn" onclick="handleConnect()">Connect MetaMask</button>';
                 refreshTimer.style.display = 'none';
 
