@@ -2,6 +2,7 @@
 # Ignore contract build i can do it as of now
 .contracts/
 .claude/
+.COPY/
 
 # Backend - Node modules and environment
 backend/node_modules/
@@ -17,3 +18,6 @@ backend/yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+
+.COPY

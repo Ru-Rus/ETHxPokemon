@@ -85,37 +85,83 @@ async function loadLocalDashboard() {
  * Load dashboard data from blockchain/API
  */
 async function loadBlockchainDashboard() {
-    const response = await apiService.getCurrentUser();
+     // Check if wallet is already connected (from MetaMask)
+    if (window.web3Utils && window.web3Utils.isMetaMaskInstalled && window.ethereum && window.ethereum.selectedAddress) {
+        console.log('Wallet already connected, initializing collection...');
+        try {
+            await window.web3Utils.connectWallet();
+            console.log('Auto-connect successful');
+        } catch (err) {
+            console.log('Auto-connect failed, will show connect prompt:', err.message);
+        }
+    }
+    loadCollectionStats();
+    //loadCollection();
+}
 
-    if (response.success) {
-        const user = response.user;
+async function loadCollectionStats() {
+    // Check if in blockchain mode
+    if (window.APP_CONFIG && window.APP_CONFIG.MODE === 'blockchain') {
+        await loadCollectionStatsFromBlockchain();
+    } 
+}
 
-        // Update username
-        document.getElementById('username').textContent = user.username;
+async function loadCollectionStatsFromBlockchain() {
+    try {
+        let ownedCount = 0;
+        let balance = '0';
 
-        // Update stats
-        document.getElementById('balance').textContent = user.balance.toLocaleString();
-        document.getElementById('total-pokemon').textContent = user.ownedPokemon.length;
-        document.getElementById('total-wins').textContent = user.totalWins;
-        document.getElementById('win-rate').textContent = user.winRate + '%';
+        if (window.web3Utils && window.web3Utils.isConnected) {
+            // Get NFT count
+            const tokenIds = await window.web3Utils.getUserNFTs();
+            ownedCount = tokenIds.length;
 
-        // Update battle stats
-        document.getElementById('easy-wins').textContent = user.battleStats.easy.wins;
-        document.getElementById('easy-losses').textContent = user.battleStats.easy.losses;
-        document.getElementById('medium-wins').textContent = user.battleStats.medium.wins;
-        document.getElementById('medium-losses').textContent = user.battleStats.medium.losses;
-        document.getElementById('hard-wins').textContent = user.battleStats.hard.wins;
-        document.getElementById('hard-losses').textContent = user.battleStats.hard.losses;
+            // Get token balance
+            balance = await window.web3Utils.getTokenBalance();
+        }
 
-        // Show dashboard content
-        document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('dashboard-content').style.display = 'block';
+        const totalCount = 151; // Gen 1 Pokemon limit
+        const response = await apiService.getCurrentUser();
+        if (response.success) {
+            const user = response.user;
+
+            // Update username
+            document.getElementById('username').textContent = user.username;
+
+            // Update stats
+            var balanceVar = balance;
+            var owneedCountVar = ownedCount
+            document.getElementById('balance').textContent = balanceVar;
+            document.getElementById('total-pokemon').textContent = owneedCountVar;
+            document.getElementById('total-wins').textContent = user.totalWins;
+            document.getElementById('win-rate').textContent = user.winRate + '%';
+
+            // Update battle stats
+            document.getElementById('easy-wins').textContent = user.battleStats.easy.wins;
+            document.getElementById('easy-losses').textContent = user.battleStats.easy.losses;
+            document.getElementById('medium-wins').textContent = user.battleStats.medium.wins;
+            document.getElementById('medium-losses').textContent = user.battleStats.medium.losses;
+            document.getElementById('hard-wins').textContent = user.battleStats.hard.wins;
+            document.getElementById('hard-losses').textContent = user.battleStats.hard.losses;
+
+            // Show dashboard content
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('dashboard-content').style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error loading collection stats from blockchain:', error);
     }
 }
 
-// Load on page load
+
+// Initialize on page load (handles async loading)
 if (document.readyState === 'loading') {
-    window.addEventListener('DOMContentLoaded', loadDashboard);
+    window.addEventListener('DOMContentLoaded', () => {
+        loadDashboard();
+    });
 } else {
+    // DOM already loaded, initialize immediately
     loadDashboard();
 }
+
+

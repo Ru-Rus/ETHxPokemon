@@ -308,6 +308,13 @@
             if (mode === 'local') {
                 await loadScript('js/storage.js');
             }
+            else{
+                // Blockchain mode
+                console.log('🔗 Loading BLOCKCHAIN mode for collection...');
+                await loadScript('https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js');
+                await loadScript('js/web3.js');
+                console.log('✅ Blockchain mode loaded for collection');
+            }
 
             // Load dashboard logic
             await loadScript('js/dashboard.js');
